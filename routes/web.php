@@ -6,13 +6,12 @@ Route::view('/', 'welcome')->name('home');
 
 // Admin route
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::view('admin/dashboard', 'dashboard-admin')->name('dashboard');
+    Route::view('admin/dashboard', 'dashboard-admin')->name('admin.dashboard');
 });
 
 // User route
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::view('/dashboard', 'dashboard')->name('dashboard');
+    Route::view('dashboard', 'dashboard')->name('user.dashboard');
 });
-
 
 require __DIR__ . '/settings.php';
