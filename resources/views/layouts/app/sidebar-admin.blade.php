@@ -15,9 +15,35 @@
 
         <flux:sidebar.nav>
             <flux:sidebar.group :heading="__('Platform')" class="grid">
+
+                {{-- Dashboard --}}
                 <flux:sidebar.item icon="home" :href="route('admin.dashboard')"
                     :current="request()->routeIs('admin.dashboard')" wire:navigate>
                     {{ __('Dashboard') }}
+                </flux:sidebar.item>
+
+                {{-- User --}}
+                <flux:sidebar.item icon="users" :href="route('users.index')"
+                    :current="request()->routeIs('users.index')" wire:navigate>
+                    {{ __('Users') }}
+                </flux:sidebar.item>
+
+                {{-- Category --}}
+                <flux:sidebar.item icon="funnel" :href="route('categories.index')"
+                    :current="request()->routeIs('categories.index')" wire:navigate>
+                    {{ __('Categories') }}
+                </flux:sidebar.item>
+
+                {{-- Genre --}}
+                <flux:sidebar.item icon="tag" :href="route('genres.index')"
+                    :current="request()->routeIs('genres.index')" wire:navigate>
+                    {{ __('Genres') }}
+                </flux:sidebar.item>
+
+                {{-- Book --}}
+                <flux:sidebar.item icon="book-open" :href="route('books.index')"
+                    :current="request()->routeIs('books.index')" wire:navigate>
+                    {{ __('Books') }}
                 </flux:sidebar.item>
             </flux:sidebar.group>
         </flux:sidebar.nav>

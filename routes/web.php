@@ -7,6 +7,30 @@ Route::view('/', 'welcome')->name('home');
 // Admin route
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::view('admin/dashboard', 'dashboard-admin')->name('admin.dashboard');
+
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::livewire('/create', 'pages::users.create')->name('create');
+        Route::livewire('/edit/{id}', 'pages::users.edit')->name('edit');
+        Route::livewire('/index', 'pages::users.index')->name('index');
+    });
+
+    Route::prefix('categories')->name('categories.')->group(function () {
+        Route::livewire('/create', 'pages::categories.create')->name('create');
+        Route::livewire('/edit/{id}', 'pages::categories.update')->name('update');
+        Route::livewire('/index', 'pages::categories.index')->name('index');
+    });
+
+    Route::prefix('genres')->name('genres.')->group(function () {
+        Route::livewire('/create', 'pages::genres.create')->name('create');
+        Route::livewire('/edit/{id}', 'pages::genres.update')->name('update');
+        Route::livewire('/index', 'pages::genres.index')->name('index');
+    });
+
+    Route::prefix('books')->name('books.')->group(function () {
+        Route::livewire('/create', 'pages::books.create')->name('create');
+        Route::livewire('/edit/{id}', 'pages::books.update')->name('update');
+        Route::livewire('/index', 'pages::books.index')->name('index');
+    });
 });
 
 // User route
