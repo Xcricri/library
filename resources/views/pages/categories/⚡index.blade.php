@@ -12,6 +12,11 @@ new class extends Component {
     #[Url]
     public $search = '';
 
+    public function search()
+    {
+        $this->resetPage();
+    }
+
     // Search category
     #[Computed]
     public function categories()
@@ -109,12 +114,31 @@ new class extends Component {
                                 Edit
                             </flux:badge>
 
-                            <flux:badge color="red" size="sm" class="cursor-pointer"
-                                wire:click="delete({{ $category->id }})">
-                                Delete
-                            </flux:badge>
+                            <flux:modal.trigger name="delete-category-{{ $category->id }}">
+                                <flux:badge color="red" size="sm" class="cursor-pointer">
+                                    Delete
+                                </flux:badge>
+                            </flux:modal.trigger>
                         </flux:table.cell>
                     </flux:table.row>
+
+                    {{-- Delete Category Modal --}}
+                    <flux:modal name="delete-category-{{ $category->id }}" class="md:w-96">
+                        <div class="space-y-6">
+                            <div>
+                                <flux:heading size="lg">Delete Category</flux:heading>
+                                <flux:text class="mt-2">Are you sure you want to delete this category? This action
+                                    cannot be undone.
+                                </flux:text>
+                            </div>
+                            <div class="flex">
+                                <flux:spacer />
+                                <flux:button type="submit" variant="primary" wire:click="delete({{ $category->id }})">
+                                    Delete
+                                </flux:button>
+                            </div>
+                        </div>
+                    </flux:modal>
                 @empty
                     <flux:table.row>
                         <flux:table.cell colspan="3" class="text-center py-6 text-gray-500">
@@ -126,6 +150,7 @@ new class extends Component {
 
         </flux:table>
     </div>
+
 
     {{-- Pagination --}}
     <div>

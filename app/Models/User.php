@@ -9,6 +9,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
@@ -36,6 +37,7 @@ class User extends Authenticatable implements PasskeyUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
+    use SoftDeletes;
 
     /**
      * Get the attributes that should be cast.
@@ -51,6 +53,14 @@ class User extends Authenticatable implements PasskeyUser
     }
 
     /**
+     * Summary of dates
+     * @var array
+     */
+    protected $dates = [
+        'deleted_at'
+    ];
+
+    /**
      * Get the user's initials
      */
     public function initials(): string
@@ -61,6 +71,7 @@ class User extends Authenticatable implements PasskeyUser
             ? Str::substr($initials, 0, 1) . Str::substr($initials, -1)
             : $initials;
     }
+
 
     /**
      * Summary of loans

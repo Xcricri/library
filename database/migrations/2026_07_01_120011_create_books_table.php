@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('author');
+            $table->string('publisher_name');
             $table->string('cover')->nullable();
             $table->text('description')->nullable();
-            $table->date('released_at')->nullable();
+            $table->date('published_at')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

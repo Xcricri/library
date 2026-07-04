@@ -2,7 +2,7 @@
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use App\Livewire\Forms\CreateBook;
+use App\Livewire\Forms\FormBook;
 use App\Models\Category;
 use App\Models\Genre;
 use App\Models\Book;
@@ -10,7 +10,7 @@ use App\Models\Book;
 new class extends Component {
     use WithFileUploads;
 
-    public CreateBook $form;
+    public FormBook $form;
 
     public $genres;
     public $categories;
@@ -38,9 +38,10 @@ new class extends Component {
         $book = Book::create([
             'title' => $this->form->title,
             'author' => $this->form->author,
+            'publisher_name' => $this->form->publisher_name,
             'cover' => $imageName,
             'description' => $this->form->description,
-            'released_at' => $this->form->released_at,
+            'published_at' => $this->form->published_at,
         ]);
 
         // Relations
@@ -95,7 +96,7 @@ new class extends Component {
                     @endif
 
                     <div class="flex-1">
-                        <flux:input type="file" wire:model="form.cover" />
+                        <flux:input type="file" accept="image/*" wire:model="form.cover" />
 
                         <flux:text size="sm" class="mt-2">
                             JPG, PNG or WEBP. Maximum 2MB.
@@ -130,7 +131,7 @@ new class extends Component {
 
                     {{-- Author --}}
                     <div class="space-y-2">
-                        <flux:label>Author</flux:label>
+                        <flux:label>Penulis Buku</flux:label>
 
                         <flux:input wire:model="form.author" placeholder="Nama penulis" />
 
@@ -139,20 +140,31 @@ new class extends Component {
                         @enderror
                     </div>
 
-                    {{-- Tanggal Rilis --}}
+                    {{-- Publisher --}}
                     <div class="space-y-2">
-                        <flux:label>Tanggal Rilis</flux:label>
+                        <flux:label>Penerbit</flux:label>
 
-                        <flux:input type="date" wire:model="form.released_at" />
+                        <flux:input wire:model="form.publisher_name" placeholder="Nama penerbit" />
 
-                        @error('form.released_at')
+                        @error('form.publisher_name')
+                            <flux:text class="text-red-500">{{ $message }}</flux:text>
+                        @enderror
+                    </div>
+
+                    {{-- Tanggal Terbit --}}
+                    <div class="space-y-2">
+                        <flux:label>Tanggal Terbit</flux:label>
+
+                        <flux:input type="date" wire:model="form.published_at" />
+
+                        @error('form.published_at')
                             <flux:text class="text-red-500">{{ $message }}</flux:text>
                         @enderror
                     </div>
 
                     {{-- Deskripsi --}}
                     <div class="space-y-2 md:col-span-2">
-                        <flux:label>Deskripsi</flux:label>
+                        <flux:label>Deskripsi Buku</flux:label>
 
                         <flux:textarea rows="5" wire:model="form.description"
                             placeholder="Masukkan deskripsi buku..." />
@@ -170,7 +182,7 @@ new class extends Component {
                     {{-- Genre --}}
                     <div class="rounded-lg p-5 space-y-4">
                         <flux:label class="font-semibold">
-                            Genre
+                            Genre Buku
                         </flux:label>
 
                         <div class="grid grid-cols-2 gap-3">
@@ -193,7 +205,7 @@ new class extends Component {
                     {{-- Kategori --}}
                     <div class="rounded-lg p-5 space-y-4">
                         <flux:label class="font-semibold">
-                            Kategori
+                            Kategori Buku
                         </flux:label>
 
                         <div class="grid grid-cols-2 gap-3">

@@ -12,6 +12,11 @@ new class extends Component {
     #[Url]
     public $search = '';
 
+    public function search()
+    {
+        $this->resetPage();
+    }
+
     // Search genre
     #[Computed]
     public function genres()
@@ -103,12 +108,31 @@ new class extends Component {
                                 Edit
                             </flux:badge>
 
-                            <flux:badge color="red" size="sm" class="cursor-pointer"
-                                wire:click="delete({{ $genre->id }})">
-                                Delete
-                            </flux:badge>
+                            <flux:modal.trigger name="delete-genre-{{ $genre->id }}">
+                                <flux:badge color="red" size="sm" class="cursor-pointer">
+                                    Delete
+                                </flux:badge>
+                            </flux:modal.trigger>
                         </flux:table.cell>
                     </flux:table.row>
+
+                    {{-- Delete Genre Modal --}}
+                    <flux:modal name="delete-genre-{{ $genre->id }}" class="md:w-96">
+                        <div class="space-y-6">
+                            <div>
+                                <flux:heading size="lg">Delete Genre</flux:heading>
+                                <flux:text class="mt-2">Are you sure you want to delete this genre? This action
+                                    cannot be undone.
+                                </flux:text>
+                            </div>
+                            <div class="flex">
+                                <flux:spacer />
+                                <flux:button type="submit" variant="primary" wire:click="delete({{ $genre->id }})">
+                                    Delete
+                                </flux:button>
+                            </div>
+                        </div>
+                    </flux:modal>
                 @empty
                     <flux:table.row>
                         <flux:table.cell colspan="3" class="text-center py-6 text-gray-500">

@@ -7,9 +7,12 @@ use App\Models\Loan;
 use App\Models\Review;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Book extends Model
 {
+    use SoftDeletes;
+
     /**
      * Summary of fillable
      * @var array
@@ -18,8 +21,17 @@ class Book extends Model
         'cover',
         'title',
         'author',
+        'publisher_name',
         'description',
-        'released_at',
+        'published_at',
+    ];
+
+    /**
+     * Summary of dates
+     * @var array
+     */
+    protected $dates = [
+        'deleted_at'
     ];
 
     /**

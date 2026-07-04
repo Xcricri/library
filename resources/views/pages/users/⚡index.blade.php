@@ -13,22 +13,45 @@ new class extends Component {
     #[Url]
     public $search = '';
 
+    #[Url]
+    public $statusFilter = 'active';
+
+    public function search()
+    {
+        $this->resetPage();
+    }
+
     // Search user
     #[Computed]
     public function users()
     {
         return User::query()
+            ->when($this->statusFilter === 'trashed', function ($query) {
+                $query->onlyTrashed();
+            })
+            ->when($this->statusFilter === 'all', function ($query) {
+                $query->withTrashed();
+            })
             ->when($this->search, function ($query, $search) {
                 $query->where('name', 'like', '%' . $search . '%');
             })
             ->paginate(5);
     }
 
-    // Delete user
-    public function delete($id)
+    // soft delete user
+    public function softDelete($id)
     {
-        $user = User::find($id);
-        User::destroy($id);
+        $user = User::findorFail($id);
+        $user->delete();
+
+        session()->flash('message', 'User deleted successfully.');
+    }
+
+    // force delete user
+    public function forceDelete($id)
+    {
+        $user = User::withTrashed()->find($id);
+        $user->forceDelete();
 
         // If avatar exists delete avatar
         if ($user->avatar) {
@@ -37,6 +60,15 @@ new class extends Component {
         }
 
         session()->flash('message', 'User deleted successfully.');
+    }
+
+    // restore method
+    public function restore($id)
+    {
+        $user = User::withTrashed()->find($id);
+        $user->restore();
+
+        session()->flash('message', 'User restored successfully.');
     }
 
     public function render()
@@ -66,7 +98,13 @@ new class extends Component {
     {{-- Toolbar --}}
     <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 
-        <div class="w-full md:max-w-sm">
+        <div class="w-full md:max-w-sm flex items-center gap-4">
+            <flux:select wire:model.live="statusFilter" placeholder="Choose status..." size="sm">
+                <flux:select.option value="active">Aktif</flux:select.option>
+                <flux:select.option value="trashed">Non-Aktif</flux:select.option>
+                <flux:select.option value="all">Semua</flux:select.option>
+            </flux:select>
+
             <flux:input icon="magnifying-glass" placeholder="Cari user..." wire:model.live.debounce.300ms="search"
                 size="sm" />
         </div>
@@ -125,17 +163,89 @@ new class extends Component {
                         </flux:table.cell>
 
                         <flux:table.cell>
-                            <flux:badge color="yellow" size="sm" href="{{ route('users.edit', $user->id) }}"
-                                wire:navigate class="cursor-pointer">
-                                Edit
-                            </flux:badge>
+                            @if ($user->trashed())
+                                <flux:modal.trigger name="restore-user-{{ $user->id }}">
+                                    <flux:badge color="blue" size="sm" class="cursor-pointer">
+                                        Restore
+                                    </flux:badge>
+                                </flux:modal.trigger>
 
-                            <flux:badge color="red" size="sm" class="cursor-pointer"
-                                wire:click="delete({{ $user->id }})">
-                                Delete
-                            </flux:badge>
+                                <flux:modal.trigger name="delete-forced-user-{{ $user->id }}">
+                                    <flux:badge color="red" size="sm" class="cursor-pointer">
+                                        Delete permanent
+                                    </flux:badge>
+                                </flux:modal.trigger>
+                            @else
+                                <flux:badge color="yellow" size="sm" href="{{ route('users.edit', $user->id) }}"
+                                    wire:navigate class="cursor-pointer">
+                                    Edit
+                                </flux:badge>
+
+                                <flux:modal.trigger name="soft-delete-user-{{ $user->id }}">
+                                    <flux:badge color="red" size="sm" class="cursor-pointer">
+                                        Delete
+                                    </flux:badge>
+                                </flux:modal.trigger>
+                            @endif
                         </flux:table.cell>
                     </flux:table.row>
+
+                    {{-- soft delete User Modal --}}
+                    <flux:modal name="soft-delete-user-{{ $user->id }}" class="md:w-96">
+                        <div class="space-y-6">
+                            <div>
+                                <flux:heading size="lg">Soft Delete User</flux:heading>
+                                <flux:text class="mt-2">Are you sure you want to soft delete this user? This action
+                                    can be undone later.
+                                </flux:text>
+                            </div>
+                            <div class="flex">
+                                <flux:spacer />
+                                <flux:button type="submit" variant="primary"
+                                    wire:click="softDelete({{ $user->id }})">
+                                    Soft Delete
+                                </flux:button>
+                            </div>
+                        </div>
+                    </flux:modal>
+
+                    {{-- force delete User Modal --}}
+                    <flux:modal name="force-delete-user-{{ $user->id }}" class="md:w-96">
+                        <div class="space-y-6">
+                            <div>
+                                <flux:heading size="lg">Force Delete User</flux:heading>
+                                <flux:text class="mt-2">Are you sure you want to force delete this user? This action
+                                    cannot be undone.
+                                </flux:text>
+                            </div>
+                            <div class="flex">
+                                <flux:spacer />
+                                <flux:button type="submit" variant="primary"
+                                    wire:click="forceDelete({{ $user->id }})">
+                                    Force Delete
+                                </flux:button>
+                            </div>
+                        </div>
+                    </flux:modal>
+
+                    {{-- Soft Delete User Modal --}}
+                    <flux:modal name="restore-user-{{ $user->id }}" class="md:w-96">
+                        <div class="space-y-6">
+                            <div>
+                                <flux:heading size="lg">Restore User</flux:heading>
+                                <flux:text class="mt-2">Are you sure you want to restore this user? This action
+                                    cannot be undone.
+                                </flux:text>
+                            </div>
+                            <div class="flex">
+                                <flux:spacer />
+                                <flux:button type="submit" variant="primary"
+                                    wire:click="restore({{ $user->id }})">
+                                    Restore
+                                </flux:button>
+                            </div>
+                        </div>
+                    </flux:modal>
                 @empty
                     <flux:table.row>
                         <flux:table.cell colspan="5" class="text-center py-6 text-gray-500">

@@ -90,7 +90,7 @@ new class extends Component {
                     @endif
 
                     <div class="flex-1">
-                        <flux:input type="file" wire:model="avatar" />
+                        <flux:input type="file" accept="image/*" wire:model="avatar" />
 
                         <flux:text size="sm" class="mt-2">
                             JPG, PNG or WEBP. Maximum 2MB.
