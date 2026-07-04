@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
+            $table->string('slug')->unique();
             $table->string('title');
             $table->string('author');
             $table->string('publisher_name');
             $table->string('cover')->nullable();
+            $table->string('ebook_file')->nullable();
+            $table->string('isbn', 13)->unique()->nullable();
             $table->text('description')->nullable();
             $table->date('published_at')->nullable();
             $table->softDeletes();

@@ -7,18 +7,25 @@ use Livewire\Form;
 
 class FormBook extends Form
 {
+    public $slug;
 
-    #[Validate('min:3|required|string|max:255')]
+    #[Validate('required|string|min:3|max:255')]
     public $title;
 
-    #[Validate('min:3|required|string|max:255')]
+    #[Validate('required|string|min:3|max:255')]
     public $author;
 
-    #[Validate('min:3|required|string|max:255')]
+    #[Validate('required|string|min:3|max:255')]
     public $publisher_name;
 
-    #[Validate('nullable|image|max:2048')]
+    #[Validate(['nullable', 'image', 'max:2048'])]
     public $cover;
+
+    #[Validate('nullable|file|mimes:pdf|max:12288')]
+    public $ebook_file;
+
+    #[Validate('nullable|string|size:13')]
+    public $isbn;
 
     #[Validate('nullable|string')]
     public $description;
@@ -26,9 +33,9 @@ class FormBook extends Form
     #[Validate('nullable|date')]
     public $published_at;
 
-    #[Validate('nullable|array|exists:genres,id')]
+    #[Validate(['genre_ids' => 'nullable|array', 'genre_ids.*' => 'exists:genres,id'])]
     public $genre_ids = [];
 
-    #[Validate('nullable|array|exists:categories,id')]
+    #[Validate(['category_ids' => 'nullable|array', 'category_ids.*' => 'exists:categories,id'])]
     public $category_ids = [];
 }

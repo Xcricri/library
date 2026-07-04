@@ -30,6 +30,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::livewire('/create', 'pages::books.create')->name('create');
         Route::livewire('/edit/{id}', 'pages::books.update')->name('update');
         Route::livewire('/index', 'pages::books.index')->name('index');
+        Route::livewire('/show/{slug}', 'pages::books.view')->name('show');
     });
 });
 

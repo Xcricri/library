@@ -3,6 +3,9 @@
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Livewire\Forms\FormBook;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+
 use App\Models\Category;
 use App\Models\Genre;
 use App\Models\Book;
@@ -24,9 +27,16 @@ new class extends Component {
 
     public function save()
     {
-        $this->validate();
+        $this->form->validate();
 
+        $ebookFile = null;
         $imageName = null;
+
+        // Save Ebook File
+        if ($this->form->ebook_file) {
+            $ebookFile = Storage::disk('public')->putFile('ebooks', $this->form->ebook_file);
+            $ebookFile = basename($ebookFile);
+        }
 
         // Save Cover
         if ($this->form->cover) {
@@ -34,12 +44,17 @@ new class extends Component {
             $this->form->cover->storeAs('covers', $imageName, 'public');
         }
 
+        $create_slug = Str::slug($this->form->title);
+
         // Create book
         $book = Book::create([
+            'slug' => $create_slug,
             'title' => $this->form->title,
             'author' => $this->form->author,
             'publisher_name' => $this->form->publisher_name,
             'cover' => $imageName,
+            'ebook_file' => $ebookFile,
+            'isbn' => $this->form->isbn,
             'description' => $this->form->description,
             'published_at' => $this->form->published_at,
         ]);
@@ -82,27 +97,42 @@ new class extends Component {
                 </flux:text>
             </div>
 
-            <!-- Avatar -->
+            <!-- Cover & Ebook File -->
             <div class="space-y-4">
 
                 <flux:label>Cover Buku</flux:label>
+                <div>
+                    @if ($this->form->cover)
+                        <div class="aspect-2/3 w-48 overflow-hidden rounded-lg">
+                            <img src="{!! $this->form->cover->temporaryUrl() !!}" alt="Cover Buku" class="w-full h-full object-cover" />
+                        </div>
+                    @endif
+                    <flux:input type="file" accept="image/*" wire:model="form.cover" />
+
+                    <flux:text size="sm" class="mt-2">
+                        JPG, PNG or WEBP. Maximum 2MB.
+                    </flux:text>
+
+                    @error('form.cover')
+                        <flux:text class="text-red-500 mt-1">
+                            {{ $message }}
+                        </flux:text>
+                    @enderror
+                </div>
+
+                {{-- Ebook File --}}
+                <flux:label>Ebook file</flux:label>
 
                 <div class="flex items-center gap-5">
 
-                    @if ($this->form->cover)
-                        <flux:avatar src="{!! $this->form->cover->temporaryUrl() !!}" size="md" />
-                    @else
-                        <flux:avatar size="md" />
-                    @endif
-
                     <div class="flex-1">
-                        <flux:input type="file" accept="image/*" wire:model="form.cover" />
+                        <flux:input type="file" accept="application/pdf" wire:model="form.ebook_file" />
 
                         <flux:text size="sm" class="mt-2">
-                            JPG, PNG or WEBP. Maximum 2MB.
+                            PDF. Maximum 12MB.
                         </flux:text>
 
-                        @error('cover')
+                        @error('form.ebook_file')
                             <flux:text class="text-red-500 mt-1">
                                 {{ $message }}
                             </flux:text>
@@ -158,6 +188,17 @@ new class extends Component {
                         <flux:input type="date" wire:model="form.published_at" />
 
                         @error('form.published_at')
+                            <flux:text class="text-red-500">{{ $message }}</flux:text>
+                        @enderror
+                    </div>
+
+                    {{-- Isbn --}}
+                    <div class="space-y-2">
+                        <flux:label>Isbn</flux:label>
+
+                        <flux:input type="text" wire:model="form.isbn" placeholder="Nomor ISBN" />
+
+                        @error('form.isbn')
                             <flux:text class="text-red-500">{{ $message }}</flux:text>
                         @enderror
                     </div>

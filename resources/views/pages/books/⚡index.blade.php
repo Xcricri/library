@@ -4,8 +4,9 @@ use Livewire\Component;
 use Livewire\Attributes\Url;
 use Livewire\Attributes\Computed;
 use Livewire\WithPagination;
-use App\Models\Book;
 use Illuminate\Support\Facades\Storage;
+
+use App\Models\Book;
 
 new class extends Component {
     use WithPagination;
@@ -62,6 +63,12 @@ new class extends Component {
         if ($book->cover) {
             // delete old image
             Storage::disk('public')->delete('covers/' . $book->cover);
+        }
+
+        // If ebook file exists delete it
+        if ($book->ebook_file) {
+            // delete old ebook file
+            Storage::disk('public')->delete('ebooks/' . $book->ebook_file);
         }
 
         session()->flash('message', 'Book permanently deleted.');
@@ -165,11 +172,8 @@ new class extends Component {
                         </flux:table.cell>
 
                         <flux:table.cell class="py-1">
-                            @if ($book->cover)
-                                <flux:avatar src="{{ Storage::url('covers/' . $book->cover) }}" class="w-9 h-9" />
-                            @else
-                                <flux:avatar class="w-9 h-9" />
-                            @endif
+                            <img src="{{ Storage::url('covers/' . $book->cover) }}" class="w-9 aspect-2/3 rounded"
+                                alt="{{ $book->title }}" />
                         </flux:table.cell>
 
                         <flux:table.cell>
@@ -186,6 +190,11 @@ new class extends Component {
                                     </flux:badge>
                                 </flux:modal.trigger>
                             @else
+                                <flux:badge color="green" size="sm" href="{{ route('books.show', $book->slug) }}"
+                                    wire:navigate class="cursor-pointer">
+                                    Show
+                                </flux:badge>
+
                                 <flux:badge color="yellow" size="sm" href="{{ route('books.update', $book->id) }}"
                                     wire:navigate class="cursor-pointer">
                                     Edit
