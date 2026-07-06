@@ -116,23 +116,32 @@ new class extends Component {
     {{-- Toolbar --}}
     <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 
-        <div class="w-full md:max-w-sm flex items-center gap-4">
-            <flux:select wire:model.live="statusFilter" placeholder="Choose status..." size="sm">
-                <flux:select.option value="active">Aktif</flux:select.option>
-                <flux:select.option value="trashed">Non-Aktif</flux:select.option>
-                <flux:select.option value="all">Semua</flux:select.option>
-            </flux:select>
+        <div class="grid grid-cols-1 gap-3 sm:flex sm:items-center sm:flex-1 sm:max-w-3xl">
+            <div class="sm:flex-1 min-w-50">
+                <flux:input icon="magnifying-glass" placeholder="Cari buku..." wire:model.live.debounce.300ms="search"
+                    size="sm" clearable />
+            </div>
 
-            <flux:input type="date" placeholder="Cari buku..." wire:model.live.debounce.300ms="date"
-                size="sm" />
+            <div class="w-full sm:w-40">
+                <flux:select wire:model.live="statusFilter" placeholder="Pilih status..." size="sm">
+                    <flux:select.option value="all">Semua Status</flux:select.option>
+                    <flux:select.option value="active">Aktif</flux:select.option>
+                    <flux:select.option value="trashed">Non-Aktif</flux:select.option>
+                </flux:select>
+            </div>
 
-            <flux:input icon="magnifying-glass" placeholder="Cari buku..." wire:model.live.debounce.300ms="search"
-                size="sm" />
+            <div class="w-full sm:w-44">
+                <flux:input type="date" wire:model.live.debounce.300ms="date" size="sm" />
+            </div>
+
         </div>
 
-        <flux:button href="{{ route('books.create') }}" wire:navigate variant="primary" size="sm">
-            Tambah Buku
-        </flux:button>
+        <div class="flex justify-end w-full md:w-auto">
+            <flux:button href="{{ route('admin.books.create') }}" wire:navigate variant="primary" size="sm"
+                icon="plus" class="w-full md:w-auto">
+                Tambah Buku
+            </flux:button>
+        </div>
 
     </div>
 
@@ -204,13 +213,15 @@ new class extends Component {
                                     </flux:badge>
                                 </flux:modal.trigger>
                             @else
-                                <flux:badge color="green" size="sm" href="{{ route('books.show', $book->slug) }}"
-                                    wire:navigate class="cursor-pointer">
+                                <flux:badge color="green" size="sm"
+                                    href="{{ route('admin.books.show', $book->slug) }}" wire:navigate
+                                    class="cursor-pointer">
                                     Show
                                 </flux:badge>
 
-                                <flux:badge color="yellow" size="sm" href="{{ route('books.update', $book->id) }}"
-                                    wire:navigate class="cursor-pointer">
+                                <flux:badge color="yellow" size="sm"
+                                    href="{{ route('admin.books.update', $book->id) }}" wire:navigate
+                                    class="cursor-pointer">
                                     Edit
                                 </flux:badge>
 
@@ -280,7 +291,7 @@ new class extends Component {
                     </flux:modal>
                 @empty
                     <flux:table.row>
-                        <flux:table.cell colspan="5" class="text-center py-6 text-gray-500">
+                        <flux:table.cell colspan="8" class="text-center py-6 text-gray-500">
                             No books found.
                         </flux:table.cell>
                     </flux:table.row>

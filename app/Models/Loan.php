@@ -12,11 +12,19 @@ class Loan extends Model
         'user_id',
         'book_id',
         'status',
+        'returned_at',
         'borrowed_at',
-        'loan_date',
         'due_date',
-        'return_date'
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'borrowed_at' => 'datetime',
+            'due_date'    => 'datetime',
+            'returned_at' => 'datetime',
+        ];
+    }
 
     /**
      * Summary of book

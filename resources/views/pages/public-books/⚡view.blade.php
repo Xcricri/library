@@ -19,7 +19,7 @@ new class extends Component {
 
     public function render()
     {
-        return $this->view()->layout('layouts::dashboard')->title('View Book');
+        return $this->view()->layout('layouts::app')->title('View Book');
     }
 };
 ?>
@@ -37,12 +37,12 @@ new class extends Component {
                 </div>
 
                 {{-- Tombol Aksi Tambahan (Opsional, sangat cocok untuk tema E-Book) --}}
-                <div class="w-full pt-2 hidden md:block">
+                {{-- <div class="w-full pt-2 hidden md:block">
                     <flux:button variant="primary" class="w-full justify-center" icon="book-open"
                         href="{{ route('books.read', $book->slug) }}" wire:navigate>
                         Baca Sekarang
                     </flux:button>
-                </div>
+                </div> --}}
             </div>
 
             {{-- Kolom Kanan: Detail & Metadata (Mengambil 2 kolom pada desktop) --}}
@@ -102,13 +102,17 @@ new class extends Component {
                     </div>
                 </div>
 
-                {{-- Tombol Aksi Mobile (Hanya muncul di layar kecil) --}}
-                <div class="pt-4 md:hidden">
-                    <flux:button variant="primary" class="w-full justify-center" icon="book-open"
-                        href="{{ route('books.read', $book->slug) }}" wire:navigate>
-                        Baca Sekarang
-                    </flux:button>
-                </div>
+                @auth
+
+                    {{-- Tombol Aksi Mobile (Hanya muncul di layar kecil) --}}
+                    <div class="pt-4 md:hidden">
+                        {{-- <flux:button variant="primary" class="w-full justify-center" icon="book-open"
+                            href="{{ route('public.books.read', $book->slug) }}" wire:navigate>
+                            Baca Sekarang
+                        </flux:button> --}}
+                    </div>
+                @else
+                @endauth
 
             </div>
         </div>

@@ -6,21 +6,34 @@ use App\Livewire\Forms\FormBook;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
+use App\Models\Book;
 use App\Models\Category;
 use App\Models\Genre;
-use App\Models\Book;
 
 new class extends Component {
     use WithFileUploads;
 
     public FormBook $form;
 
+    public Book $book;
+
     public $genres;
     public $categories;
 
     // Mount data
-    public function mount()
+    public function mount($id)
     {
+        $this->book = Book::with(['genres', 'categories'])->findOrFail($id);
+        $this->form->title = $this->book->title;
+        $this->form->author = $this->book->author;
+        $this->form->publisher_name = $this->book->publisher_name;
+        $this->form->isbn = $this->book->isbn;
+        $this->form->stock = $this->book->stock;
+        $this->form->description = $this->book->description;
+        $this->form->published_at = $this->book->published_at;
+        $this->form->genre_ids = $this->book->genres()->pluck('genres.id')->unique()->toArray();
+        $this->form->category_ids = $this->book->categories()->pluck('categories.id')->unique()->toArray();
+
         $this->genres = Genre::all();
         $this->categories = Category::all();
     }
@@ -29,44 +42,58 @@ new class extends Component {
     {
         $this->form->validate();
 
-        $ebookFile = null;
+        $ebookFile = $this->book->ebook_file;
         $imageName = null;
 
         // Save Ebook File
         if ($this->form->ebook_file) {
+            // delete old ebook file
+            if ($this->book->ebook_file) {
+                Storage::disk('public')->delete('ebooks/' . $this->book->ebook_file);
+            }
+
             $ebookFile = Storage::disk('public')->putFile('ebooks', $this->form->ebook_file);
+
             $ebookFile = basename($ebookFile);
         }
 
-        // Save Cover
+        // Save cover
         if ($this->form->cover) {
+            // delete old image
+            Storage::disk('public')->delete('covers/' . $this->book->cover);
+
+            // store image
+            $this->form->cover->storeAs('covers', $this->form->cover->hashName(), 'public');
+
+            // get image name
             $imageName = $this->form->cover->hashName();
-            $this->form->cover->storeAs('covers', $imageName, 'public');
+        } else {
+            $imageName = $this->book->cover;
         }
 
-        $create_slug = Str::slug($this->form->title);
+        // Generate slug
+        $created_slug = Str::slug($this->form->title);
 
-        // Create book
-        $book = Book::create([
-            'slug' => $create_slug,
+        // Update book
+        $this->book->update([
+            'slug' => $created_slug,
             'title' => $this->form->title,
             'author' => $this->form->author,
-            'publisher_name' => $this->form->publisher_name,
             'cover' => $imageName,
             'ebook_file' => $ebookFile,
             'isbn' => $this->form->isbn,
-            'stock' => $this->form->stock,
             'description' => $this->form->description,
             'published_at' => $this->form->published_at,
+            'stock' => $this->form->stock,
         ]);
 
         // Relations
-        $book->categories()->sync($this->form->category_ids ?? []);
-        $book->genres()->sync($this->form->genre_ids ?? []);
+        $this->book->categories()->sync($this->form->category_ids ?? []);
+        $this->book->genres()->sync($this->form->genre_ids ?? []);
 
-        session()->flash('success', 'Buku berhasil ditambahkan.');
+        session()->flash('success', 'Buku berhasil diperbarui.');
 
-        redirect()->route('books.index');
+        redirect()->route('admin.books.index');
     }
 
     public function render()
@@ -76,7 +103,7 @@ new class extends Component {
             'categories' => $this->categories,
         ])
             ->layout('layouts::dashboard')
-            ->title('Tambah Buku');
+            ->title('Update Buku');
     }
 };
 ?>
@@ -90,11 +117,11 @@ new class extends Component {
             <!-- Header -->
             <div class="border-b pb-5">
                 <flux:heading size="xl">
-                    Tambah Buku
+                    Update Buku
                 </flux:heading>
 
                 <flux:text class="mt-2">
-                    Isi informasi di bawah ini untuk membuat buku baru.
+                    Update informasi buku.
                 </flux:text>
             </div>
 
@@ -102,12 +129,19 @@ new class extends Component {
             <div class="space-y-4">
 
                 <flux:label>Cover Buku</flux:label>
-                <div>
+
+                <div class="flex-1">
                     @if ($this->form->cover)
                         <div class="aspect-2/3 w-48 overflow-hidden rounded-lg">
                             <img src="{!! $this->form->cover->temporaryUrl() !!}" alt="Cover Buku" class="w-full h-full object-cover" />
                         </div>
+                    @elseif ($this->book->cover)
+                        <div class="aspect-2/3 w-48 overflow-hidden rounded-lg">
+                            <img src="{{ Storage::url('covers/' . $this->book->cover) }}" alt="Cover Buku"
+                                class="w-full h-full object-cover" />
+                        </div>
                     @endif
+
                     <flux:input type="file" accept="image/*" wire:model="form.cover" />
 
                     <flux:text size="sm" class="mt-2">
@@ -141,8 +175,8 @@ new class extends Component {
                     </div>
 
                 </div>
-
             </div>
+
 
             <div class="space-y-8">
 
@@ -285,7 +319,7 @@ new class extends Component {
             <div class="flex justify-end border-t pt-6">
 
                 <flux:button variant="primary" type="submit">
-                    Buat Buku
+                    Update Buku
                 </flux:button>
 
             </div>

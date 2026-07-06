@@ -10,7 +10,7 @@ new class extends Component {
     public function mount($slug)
     {
         $this->book = Book::where('slug', $slug)->firstOrFail();
-        $this->pdfUrl = route('books.pdf', $this->book->slug);
+        $this->pdfUrl = route('admin.books.pdf', $this->book->slug);
     }
 
     public function render()

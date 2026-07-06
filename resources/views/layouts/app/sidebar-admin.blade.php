@@ -48,8 +48,8 @@
                 </flux:sidebar.item>
 
                 {{-- Book --}}
-                <flux:sidebar.item icon="book-open" :href="route('books.index')"
-                    :current="request()->routeIs('books.index')" wire:navigate>
+                <flux:sidebar.item icon="book-open" :href="route('admin.books.index')"
+                    :current="request()->routeIs('admin.books.index')" wire:navigate>
                     {{ __('Books') }}
                 </flux:sidebar.item>
             </flux:sidebar.group>

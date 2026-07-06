@@ -98,20 +98,28 @@ new class extends Component {
     {{-- Toolbar --}}
     <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 
-        <div class="w-full md:max-w-sm flex items-center gap-4">
-            <flux:select wire:model.live="statusFilter" placeholder="Choose status..." size="sm">
-                <flux:select.option value="active">Aktif</flux:select.option>
-                <flux:select.option value="trashed">Non-Aktif</flux:select.option>
-                <flux:select.option value="all">Semua</flux:select.option>
-            </flux:select>
+        <div class="grid grid-cols-1 gap-3 sm:flex sm:items-center sm:flex-1 sm:max-w-3xl">
+            <div class="w-full md:max-w-sm">
+                <flux:input icon="magnifying-glass" placeholder="Cari user..." wire:model.live.debounce.300ms="search"
+                    size="sm" clearable />
+            </div>
 
-            <flux:input icon="magnifying-glass" placeholder="Cari user..." wire:model.live.debounce.300ms="search"
-                size="sm" />
+            <div class="w-full sm:w-40">
+                <flux:select wire:model.live="statusFilter" placeholder="Pilih status..." size="sm">
+                    <flux:select.option value="all">Semua Status</flux:select.option>
+                    <flux:select.option value="active">Aktif</flux:select.option>
+                    <flux:select.option value="trashed">Non-Aktif</flux:select.option>
+                </flux:select>
+            </div>
+
         </div>
 
-        <flux:button href="{{ route('users.create') }}" wire:navigate variant="primary" size="sm">
-            Tambah User
-        </flux:button>
+        <div class="flex justify-end w-full md:w-auto">
+            <flux:button href="{{ route('users.create') }}" wire:navigate variant="primary" size="sm"
+                icon="plus" class="w-full md:w-auto">
+                Tambah User
+            </flux:button>
+        </div>
 
     </div>
 

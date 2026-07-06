@@ -1,3 +1,5 @@
 <x-layouts::app :title="__('Welcome')">
-    <livewire:card.books />
+
+    <flux:button href="{{ route('public.books.index') }}">Lihat semua buku</flux:button>
+
 </x-layouts::app>
