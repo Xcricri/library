@@ -38,7 +38,8 @@ new class extends Component {
 
                 {{-- Tombol Aksi Tambahan (Opsional, sangat cocok untuk tema E-Book) --}}
                 <div class="w-full pt-2 hidden md:block">
-                    <flux:button variant="primary" class="w-full justify-center" icon="book-open">
+                    <flux:button variant="primary" class="w-full justify-center" icon="book-open"
+                        href="{{ route('books.read', $book->slug) }}" wire:navigate>
                         Baca Sekarang
                     </flux:button>
                 </div>
@@ -103,7 +104,8 @@ new class extends Component {
 
                 {{-- Tombol Aksi Mobile (Hanya muncul di layar kecil) --}}
                 <div class="pt-4 md:hidden">
-                    <flux:button variant="primary" class="w-full justify-center" icon="book-open">
+                    <flux:button variant="primary" class="w-full justify-center" icon="book-open"
+                        href="{{ route('books.read', $book->slug) }}" wire:navigate>
                         Baca Sekarang
                     </flux:button>
                 </div>

@@ -5,7 +5,7 @@ use Livewire\Component;
 new class extends Component {
     public function render()
     {
-        return $this->view()->layout('layouts::dashboard')->title('Index Loans');
+        return $this->view()->layout('layouts::dashboard')->title('List Buku');
     }
 };
 ?>
@@ -15,10 +15,10 @@ new class extends Component {
     {{-- Header --}}
     <div>
         <flux:heading size="lg">
-            Table Pinjaman
+            Tabel Buku
 
             <flux:text>
-                Daftar Pinjaman di perpustakaan
+                Daftar buku di perpustakaan
             </flux:text>
         </flux:heading>
     </div>
@@ -43,23 +43,18 @@ new class extends Component {
         <flux:table.columns>
             <flux:table.column>Nomor</flux:table.column>
             <flux:table.column>Buku</flux:table.column>
-            <flux:table.column>Tanggal Pinjaman</flux:table.column>
-            <flux:table.column>Tanggal Kembali</flux:table.column>
-            <flux:table.column>Tenggat Waktu</flux:table.column>
-            <flux:table.column>Denda</flux:table.column>
-            <flux:table.column>Status</flux:table.column>
+            <flux:table.column>Genre</flux:table.column>
+            <flux:table.column>Action</flux:table.column>
         </flux:table.columns>
 
         <flux:table.rows>
             <flux:table.row>
                 <flux:table.cell>1</flux:table.cell>
                 <flux:table.cell>Lindsey Aminoff</flux:table.cell>
-                <flux:table.cell>Jul 29, 10:45 AM</flux:table.cell>
-                <flux:table.cell>Aug 5, 10:45 AM</flux:table.cell>
-                <flux:table.cell>Aug 12, 10:45 AM</flux:table.cell>
-                <flux:table.cell>Rp --</flux:table.cell>
+                <flux:table.cell>Fiksi</flux:table.cell>
                 <flux:table.cell class="py-0">
-                    <flux:badge color="green" size="sm">Dikembalikan</flux:badge>
+                    <flux:badge color="blue" size="sm">Baca Buku</flux:badge>
+                    <flux:badge color="red" size="sm">Kembalikan buku</flux:badge>
                 </flux:table.cell>
             </flux:table.row>
         </flux:table.rows>

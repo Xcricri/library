@@ -15,6 +15,9 @@ new class extends Component {
     public $search = '';
 
     #[Url]
+    public $date = '';
+
+    #[Url]
     public $statusFilter = 'active';
 
     public function search()
@@ -40,6 +43,9 @@ new class extends Component {
             })
             ->when($this->search, function ($q) {
                 $q->where('title', 'like', "%{$this->search}%")->orWhere('author', 'like', "%{$this->search}%");
+            })
+            ->when($this->date, function ($q) {
+                $q->where('published_at', $this->date);
             })
             ->paginate(5);
     }
@@ -117,6 +123,9 @@ new class extends Component {
                 <flux:select.option value="all">Semua</flux:select.option>
             </flux:select>
 
+            <flux:input type="date" placeholder="Cari buku..." wire:model.live.debounce.300ms="date"
+                size="sm" />
+
             <flux:input icon="magnifying-glass" placeholder="Cari buku..." wire:model.live.debounce.300ms="search"
                 size="sm" />
         </div>
@@ -144,7 +153,8 @@ new class extends Component {
                 <flux:table.column>Penulis</flux:table.column>
                 <flux:table.column>Penerbit</flux:table.column>
                 <flux:table.column>Tahun Terbit</flux:table.column>
-                <flux:table.column>Cover</flux:table.column>
+                <flux:table.column>Cover Buku</flux:table.column>
+                <flux:table.column>Stock Buku</flux:table.column>
                 <flux:table.column class="text-right">Action</flux:table.column>
             </flux:table.columns>
 
@@ -174,6 +184,10 @@ new class extends Component {
                         <flux:table.cell class="py-1">
                             <img src="{{ Storage::url('covers/' . $book->cover) }}" class="w-9 aspect-2/3 rounded"
                                 alt="{{ $book->title }}" />
+                        </flux:table.cell>
+
+                        <flux:table.cell>
+                            {{ $book->stock }}
                         </flux:table.cell>
 
                         <flux:table.cell>

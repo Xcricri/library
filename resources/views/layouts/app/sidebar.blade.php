@@ -19,22 +19,20 @@
                     :current="request()->routeIs('user.dashboard')" wire:navigate>
                     {{ __('Dashboard') }}
                 </flux:sidebar.item>
+
+                <flux:sidebar.item icon="clock" :href="route('loans.index')"
+                    :current="request()->routeIs('loans.index')" wire:navigate>
+                    {{ __('Pinjaman') }}
+                </flux:sidebar.item>
+
+                <flux:sidebar.item icon="book-open" :href="route('user.books.index')"
+                    :current="request()->routeIs('user.books.index')" wire:navigate>
+                    {{ __('Buku') }}
+                </flux:sidebar.item>
             </flux:sidebar.group>
         </flux:sidebar.nav>
 
         <flux:spacer />
-
-        <flux:sidebar.nav>
-            <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit"
-                target="_blank">
-                {{ __('Repository') }}
-            </flux:sidebar.item>
-
-            <flux:sidebar.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire"
-                target="_blank">
-                {{ __('Documentation') }}
-            </flux:sidebar.item>
-        </flux:sidebar.nav>
 
         <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
     </flux:sidebar>

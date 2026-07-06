@@ -27,6 +27,9 @@ class FormBook extends Form
     #[Validate('nullable|string|size:13')]
     public $isbn;
 
+    #[Validate('nullable|integer|min:0')]
+    public $stock;
+
     #[Validate('nullable|string')]
     public $description;
 

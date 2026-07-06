@@ -11,16 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('loans', function (Blueprint $table) {
+        Schema::create('loan_book', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('loan_id')->constrained()->onDelete('cascade');
             $table->foreignId('book_id')->constrained()->onDelete('cascade');
-            $table->enum('status', ['borrowed', 'returned', 'late'])->default('borrowed');
-            $table->date('borrowed_at');
-            $table->date('loan_date');
-            $table->date('due_date');
-            $table->date('return_date')->nullable();
-            $table->decimal('fine', 10, 2)->default(0.00);
             $table->timestamps();
         });
     }
@@ -30,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('loans');
+        Schema::dropIfExists('loan_book');
     }
 };

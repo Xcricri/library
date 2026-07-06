@@ -55,6 +55,7 @@ new class extends Component {
             'cover' => $imageName,
             'ebook_file' => $ebookFile,
             'isbn' => $this->form->isbn,
+            'stock' => $this->form->stock,
             'description' => $this->form->description,
             'published_at' => $this->form->published_at,
         ]);
@@ -199,6 +200,17 @@ new class extends Component {
                         <flux:input type="text" wire:model="form.isbn" placeholder="Nomor ISBN" />
 
                         @error('form.isbn')
+                            <flux:text class="text-red-500">{{ $message }}</flux:text>
+                        @enderror
+                    </div>
+
+                    {{-- Stock --}}
+                    <div class="space-y-2">
+                        <flux:label>Stok Buku</flux:label>
+
+                        <flux:input type="number" wire:model="form.stock" placeholder="Jumlah stok" />
+
+                        @error('form.stock')
                             <flux:text class="text-red-500">{{ $message }}</flux:text>
                         @enderror
                     </div>

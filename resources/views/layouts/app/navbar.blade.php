@@ -44,6 +44,8 @@
             </flux:navbar>
         @endif
     </flux:header>
+
+
     {{ $slot }}
 
     @livewireScripts

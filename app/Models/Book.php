@@ -25,6 +25,7 @@ class Book extends Model
         'cover',
         'ebook_file',
         'isbn',
+        'stock',
         'description',
         'published_at',
     ];
