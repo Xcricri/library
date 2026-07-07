@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('author');
             $table->string('publisher_name');
             $table->string('cover')->nullable();
-            $table->string('ebook_file')->nullable();
             $table->string('isbn', 13)->unique()->nullable();
             $table->unsignedInteger('stock')->default(0);
             $table->text('description')->nullable();

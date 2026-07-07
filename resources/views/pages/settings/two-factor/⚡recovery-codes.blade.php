@@ -46,14 +46,18 @@ new class extends Component {
 }; ?>
 
 <div
-    class="py-6 space-y-6 border shadow-sm rounded-xl border-zinc-200 dark:border-white/10"
+    class="space-y-6 rounded-xl border border-zinc-200 py-6 shadow-sm dark:border-white/10"
     wire:cloak
     x-data="{ showRecoveryCodes: false }"
 >
-    <div class="px-6 space-y-2">
+    <div class="space-y-2 px-6">
         <div class="flex items-center gap-2">
-            <flux:icon.lock-closed variant="outline" class="size-4"/>
-            <flux:heading size="lg" level="3">{{ __('2FA recovery codes') }}</flux:heading>
+            <flux:icon.lock-closed variant="outline" class="size-4" />
+            <flux:heading
+                size="lg"
+                level="3"
+                >{{ __('2FA recovery codes') }}</flux:heading
+            >
         </div>
         <flux:text variant="subtle">
             {{ __('Recovery codes let you regain access if you lose your 2FA device. Store them in a secure password manager.') }}
@@ -61,13 +65,15 @@ new class extends Component {
     </div>
 
     <div class="px-6">
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div
+            class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+        >
             <flux:button
                 x-show="!showRecoveryCodes"
                 icon="eye"
                 icon:variant="outline"
                 variant="primary"
-                @click="showRecoveryCodes = true;"
+                @click="showRecoveryCodes = true"
                 aria-expanded="false"
                 aria-controls="recovery-codes-section"
             >
@@ -106,17 +112,21 @@ new class extends Component {
             x-bind:aria-hidden="!showRecoveryCodes"
         >
             <div class="mt-3 space-y-3">
-                @error('recoveryCodes')
-                    <flux:callout variant="danger" icon="x-circle" heading="{{$message}}"/>
+                @error ('recoveryCodes')
+                    <flux:callout
+                        variant="danger"
+                        icon="x-circle"
+                        heading="{{$message}}"
+                    />
                 @enderror
 
                 @if (filled($recoveryCodes))
                     <div
-                        class="grid gap-1 p-4 font-mono text-sm rounded-lg bg-zinc-100 dark:bg-white/5"
+                        class="grid gap-1 rounded-lg bg-zinc-100 p-4 font-mono text-sm dark:bg-white/5"
                         role="list"
                         aria-label="{{ __('Recovery codes') }}"
                     >
-                        @foreach($recoveryCodes as $code)
+                        @foreach ($recoveryCodes as $code)
                             <div
                                 role="listitem"
                                 class="select-text"

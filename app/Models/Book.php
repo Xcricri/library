@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Genre;
-use App\Models\Loan;
+use App\Models\Borrowing;
 use App\Models\Review;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
@@ -23,7 +23,6 @@ class Book extends Model
         'author',
         'publisher_name',
         'cover',
-        'ebook_file',
         'isbn',
         'stock',
         'description',
@@ -57,12 +56,12 @@ class Book extends Model
     }
 
     /**
-     * Summary of loans
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Loan, Book, TPivotModel>
+     * Summary of borrowings
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Borrowing, Book, TPivotModel>
      */
-    public function loans()
+    public function borrowings()
     {
-        return $this->hasMany(Loan::class);
+        return $this->hasMany(Borrowing::class);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use App\Livewire\Forms\FormBook;
+use App\Livewire\Forms\BookForm;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,7 +13,7 @@ use App\Models\Book;
 new class extends Component {
     use WithFileUploads;
 
-    public FormBook $form;
+    public BookForm $form;
 
     public $genres;
     public $categories;
@@ -29,14 +29,7 @@ new class extends Component {
     {
         $this->form->validate();
 
-        $ebookFile = null;
         $imageName = null;
-
-        // Save Ebook File
-        if ($this->form->ebook_file) {
-            $ebookFile = Storage::disk('public')->putFile('ebooks', $this->form->ebook_file);
-            $ebookFile = basename($ebookFile);
-        }
 
         // Save Cover
         if ($this->form->cover) {
@@ -53,7 +46,6 @@ new class extends Component {
             'author' => $this->form->author,
             'publisher_name' => $this->form->publisher_name,
             'cover' => $imageName,
-            'ebook_file' => $ebookFile,
             'isbn' => $this->form->isbn,
             'stock' => $this->form->stock,
             'description' => $this->form->description,
@@ -64,7 +56,7 @@ new class extends Component {
         $book->categories()->sync($this->form->category_ids ?? []);
         $book->genres()->sync($this->form->genre_ids ?? []);
 
-        session()->flash('success', 'Buku berhasil ditambahkan.');
+        session()->flash('success', 'Book added successfully.');
 
         redirect()->route('admin.books.index');
     }
@@ -76,120 +68,122 @@ new class extends Component {
             'categories' => $this->categories,
         ])
             ->layout('layouts::dashboard')
-            ->title('Tambah Buku');
+            ->title('Add Book');
     }
 };
 ?>
 
-
-<div class="max-w-7xl mx-auto">
+<div class="mx-auto max-w-7xl">
     <flux:card>
-
         <form wire:submit="save" class="space-y-8">
-
             <!-- Header -->
             <div class="border-b pb-5">
-                <flux:heading size="xl">
-                    Tambah Buku
-                </flux:heading>
+                <flux:heading size="xl"> Add Book </flux:heading>
 
                 <flux:text class="mt-2">
-                    Isi informasi di bawah ini untuk membuat buku baru.
+                    Fill in the information below to create a new book.
                 </flux:text>
             </div>
 
-            <!-- Cover & Ebook File -->
+            <!-- Book Cover -->
             <div class="space-y-4">
-
-                <flux:label>Cover Buku</flux:label>
+                <flux:label>Book Cover</flux:label>
                 <div>
                     @if ($this->form->cover)
                         <div class="aspect-2/3 w-48 overflow-hidden rounded-lg">
-                            <img src="{!! $this->form->cover->temporaryUrl() !!}" alt="Cover Buku" class="w-full h-full object-cover" />
+                            <img
+                                src="{!! $this->form->cover->temporaryUrl() !!}"
+                                alt="Book Cover"
+                                class="h-full w-full object-cover"
+                            />
                         </div>
                     @endif
-                    <flux:input type="file" accept="image/*" wire:model="form.cover" />
+                    <flux:input
+                        type="file"
+                        accept="image/*"
+                        wire:model="form.cover"
+                    />
 
                     <flux:text size="sm" class="mt-2">
                         JPG, PNG or WEBP. Maximum 2MB.
                     </flux:text>
 
-                    @error('form.cover')
-                        <flux:text class="text-red-500 mt-1">
+                    @error ('form.cover')
+                        <flux:text class="mt-1 text-red-500">
                             {{ $message }}
                         </flux:text>
                     @enderror
                 </div>
-
-                {{-- Ebook File --}}
-                <flux:label>Ebook file</flux:label>
-
-                <div class="flex items-center gap-5">
-
-                    <div class="flex-1">
-                        <flux:input type="file" accept="application/pdf" wire:model="form.ebook_file" />
-
-                        <flux:text size="sm" class="mt-2">
-                            PDF. Maximum 12MB.
-                        </flux:text>
-
-                        @error('form.ebook_file')
-                            <flux:text class="text-red-500 mt-1">
-                                {{ $message }}
-                            </flux:text>
-                        @enderror
-                    </div>
-
-                </div>
-
             </div>
 
             <div class="space-y-8">
-
-                {{-- Informasi Buku --}}
+                {{-- Book Information --}}
                 <div class="grid gap-6 md:grid-cols-2">
-
-                    {{-- Judul --}}
+                    {{-- Book Title --}}
                     <div class="space-y-2 md:col-span-2">
-                        <flux:label>Judul Buku</flux:label>
+                        <flux:label>Book Title</flux:label>
 
-                        <flux:input wire:model="form.title" placeholder="Masukkan judul buku" />
+                        <flux:input
+                            wire:model="form.title"
+                            placeholder="Enter book title"
+                        />
 
-                        @error('form.title')
-                            <flux:text class="text-red-500">{{ $message }}</flux:text>
+                        @error ('form.title')
+                            <flux:text
+                                class="text-red-500"
+                                >{{ $message }}</flux:text
+                            >
                         @enderror
                     </div>
 
                     {{-- Author --}}
                     <div class="space-y-2">
-                        <flux:label>Penulis Buku</flux:label>
+                        <flux:label>Author</flux:label>
 
-                        <flux:input wire:model="form.author" placeholder="Nama penulis" />
+                        <flux:input
+                            wire:model="form.author"
+                            placeholder="Enter author name"
+                        />
 
-                        @error('form.author')
-                            <flux:text class="text-red-500">{{ $message }}</flux:text>
+                        @error ('form.author')
+                            <flux:text
+                                class="text-red-500"
+                                >{{ $message }}</flux:text
+                            >
                         @enderror
                     </div>
 
                     {{-- Publisher --}}
                     <div class="space-y-2">
-                        <flux:label>Penerbit</flux:label>
+                        <flux:label>Publisher</flux:label>
 
-                        <flux:input wire:model="form.publisher_name" placeholder="Nama penerbit" />
+                        <flux:input
+                            wire:model="form.publisher_name"
+                            placeholder="Enter publisher name"
+                        />
 
-                        @error('form.publisher_name')
-                            <flux:text class="text-red-500">{{ $message }}</flux:text>
+                        @error ('form.publisher_name')
+                            <flux:text
+                                class="text-red-500"
+                                >{{ $message }}</flux:text
+                            >
                         @enderror
                     </div>
 
-                    {{-- Tanggal Terbit --}}
+                    {{-- Publication Date --}}
                     <div class="space-y-2">
-                        <flux:label>Tanggal Terbit</flux:label>
+                        <flux:label>Publication Date</flux:label>
 
-                        <flux:input type="date" wire:model="form.published_at" />
+                        <flux:input
+                            type="date"
+                            wire:model="form.published_at"
+                        />
 
-                        @error('form.published_at')
-                            <flux:text class="text-red-500">{{ $message }}</flux:text>
+                        @error ('form.published_at')
+                            <flux:text
+                                class="text-red-500"
+                                >{{ $message }}</flux:text
+                            >
                         @enderror
                     </div>
 
@@ -197,51 +191,74 @@ new class extends Component {
                     <div class="space-y-2">
                         <flux:label>Isbn</flux:label>
 
-                        <flux:input type="text" wire:model="form.isbn" placeholder="Nomor ISBN" />
+                        <flux:input
+                            type="text"
+                            wire:model="form.isbn"
+                            placeholder="Enter ISBN"
+                        />
 
-                        @error('form.isbn')
-                            <flux:text class="text-red-500">{{ $message }}</flux:text>
+                        @error ('form.isbn')
+                            <flux:text
+                                class="text-red-500"
+                                >{{ $message }}</flux:text
+                            >
                         @enderror
                     </div>
 
                     {{-- Stock --}}
                     <div class="space-y-2">
-                        <flux:label>Stok Buku</flux:label>
+                        <flux:label>Book Stock</flux:label>
 
-                        <flux:input type="number" wire:model="form.stock" placeholder="Jumlah stok" />
+                        <flux:input
+                            type="number"
+                            wire:model="form.stock"
+                            placeholder="Enter book stock"
+                        />
 
-                        @error('form.stock')
-                            <flux:text class="text-red-500">{{ $message }}</flux:text>
+                        @error ('form.stock')
+                            <flux:text
+                                class="text-red-500"
+                                >{{ $message }}</flux:text
+                            >
                         @enderror
                     </div>
 
-                    {{-- Deskripsi --}}
+                    {{-- Book Description --}}
                     <div class="space-y-2 md:col-span-2">
-                        <flux:label>Deskripsi Buku</flux:label>
+                        <flux:label>Book Description</flux:label>
 
-                        <flux:textarea rows="5" wire:model="form.description"
-                            placeholder="Masukkan deskripsi buku..." />
+                        <flux:textarea
+                            rows="5"
+                            wire:model="form.description"
+                            placeholder="Enter book description..."
+                        />
 
-                        @error('form.description')
-                            <flux:text class="text-red-500">{{ $message }}</flux:text>
+                        @error ('form.description')
+                            <flux:text
+                                class="text-red-500"
+                                >{{ $message }}</flux:text
+                            >
                         @enderror
                     </div>
-
                 </div>
 
-                {{-- Genre & Kategori --}}
+                {{-- Genre & Category --}}
                 <div class="grid gap-6 lg:grid-cols-2">
-
                     {{-- Genre --}}
-                    <div class="rounded-lg p-5 space-y-4">
+                    <div class="space-y-4 rounded-lg p-5">
                         <flux:label class="font-semibold">
-                            Genre Buku
+                            Book Genre
                         </flux:label>
 
                         <div class="grid grid-cols-2 gap-3">
                             @foreach ($genres as $genre)
-                                <label class="flex items-center gap-2 cursor-pointer">
-                                    <flux:checkbox wire:model="form.genre_ids" value="{{ $genre->id }}" />
+                                <label
+                                    class="flex cursor-pointer items-center gap-2"
+                                >
+                                    <flux:checkbox
+                                        wire:model="form.genre_ids"
+                                        value="{{ $genre->id }}"
+                                    />
 
                                     <span class="text-sm">
                                         {{ $genre->name }}
@@ -250,21 +267,29 @@ new class extends Component {
                             @endforeach
                         </div>
 
-                        @error('form.genre_ids')
-                            <flux:text class="text-red-500">{{ $message }}</flux:text>
+                        @error ('form.genre_ids')
+                            <flux:text
+                                class="text-red-500"
+                                >{{ $message }}</flux:text
+                            >
                         @enderror
                     </div>
 
-                    {{-- Kategori --}}
-                    <div class="rounded-lg p-5 space-y-4">
+                    {{-- Category --}}
+                    <div class="space-y-4 rounded-lg p-5">
                         <flux:label class="font-semibold">
-                            Kategori Buku
+                            Book Category
                         </flux:label>
 
                         <div class="grid grid-cols-2 gap-3">
                             @foreach ($categories as $category)
-                                <label class="flex items-center gap-2 cursor-pointer">
-                                    <flux:checkbox wire:model="form.category_ids" value="{{ $category->id }}" />
+                                <label
+                                    class="flex cursor-pointer items-center gap-2"
+                                >
+                                    <flux:checkbox
+                                        wire:model="form.category_ids"
+                                        value="{{ $category->id }}"
+                                    />
 
                                     <span class="text-sm">
                                         {{ $category->name }}
@@ -273,24 +298,21 @@ new class extends Component {
                             @endforeach
                         </div>
 
-                        @error('form.category_ids')
-                            <flux:text class="text-red-500">{{ $message }}</flux:text>
+                        @error ('form.category_ids')
+                            <flux:text
+                                class="text-red-500"
+                                >{{ $message }}</flux:text
+                            >
                         @enderror
                     </div>
-
                 </div>
-
             </div>
             <!-- Footer -->
             <div class="flex justify-end border-t pt-6">
-
                 <flux:button variant="primary" type="submit">
                     Buat Buku
                 </flux:button>
-
             </div>
-
         </form>
-
     </flux:card>
 </div>

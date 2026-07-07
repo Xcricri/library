@@ -20,43 +20,38 @@ new class extends Component {
             'description' => $this->description,
         ]);
 
-        session()->flash('message', 'Kategori berhasil ditambahkan.');
+        session()->flash('message', 'Category created successfully.');
 
         redirect()->route('categories.index');
     }
 
     public function render()
     {
-        return $this->view()->layout('layouts::dashboard')->title('Tambah Kategori');
+        return $this->view()->layout('layouts::dashboard')->title('Add Category');
     }
 };
 ?>
 
-<div class="max-w-7xl mx-auto">
+<div class="mx-auto max-w-7xl">
     <flux:card>
-
         <form wire:submit="save" class="space-y-8">
-
             <!-- Header -->
             <div class="border-b pb-5">
-                <flux:heading size="xl">
-                    Tambah Kategori
-                </flux:heading>
+                <flux:heading size="xl"> Add Category </flux:heading>
 
                 <flux:text class="mt-2">
-                    Isi informasi di bawah ini untuk membuat kategori baru.
+                    Fill in the information below to create a new category.
                 </flux:text>
             </div>
 
             <!-- Information -->
             <div class="grid gap-6">
-
                 <div class="space-y-2">
-                    <flux:label>Nama kategori</flux:label>
+                    <flux:label>Name</flux:label>
 
                     <flux:input wire:model="name" placeholder="John Doe" />
 
-                    @error('name')
+                    @error ('name')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>
@@ -64,11 +59,14 @@ new class extends Component {
                 </div>
 
                 <div class="space-y-2">
-                    <flux:label>Deskripsi</flux:label>
+                    <flux:label>Description</flux:label>
 
-                    <flux:textarea wire:model="description" placeholder="Description" />
+                    <flux:textarea
+                        wire:model="description"
+                        placeholder="Description"
+                    />
 
-                    @error('description')
+                    @error ('description')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>
@@ -78,13 +76,10 @@ new class extends Component {
 
             <!-- Footer -->
             <div class="flex justify-end border-t pt-6">
-
                 <flux:button variant="primary" type="submit">
-                    Create Kategori
+                    Create Category
                 </flux:button>
-
             </div>
-
         </form>
     </flux:card>
 </div>

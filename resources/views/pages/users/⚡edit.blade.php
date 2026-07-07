@@ -1,35 +1,27 @@
 <?php
 
 use Livewire\Component;
-use Livewire\Attributes\Validate;
-use App\Models\User;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
+use App\Livewire\Forms\UserForm;
+use Illuminate\Support\Facades\Hash;
+
+use App\Models\User;
 
 new class extends Component {
     use WithFileUploads;
 
+    public UserForm $form;
     public User $user;
-
-    #[Validate('min:5|required|string|max:255')]
-    public $name;
-
-    #[Validate('min:5|required|email|max:255')]
-    public $email;
-
-    #[Validate('nullable|image|max:2048')]
-    public $avatar;
-
-    #[Validate('nullable|in:admin,user')]
-    public $role = '';
 
     // Mount data
     public function mount($id)
     {
         $this->user = User::findOrFail($id);
-        $this->name = $this->user->name;
-        $this->email = $this->user->email;
-        $this->role = $this->user->role;
+        $this->form->name = $this->user->name;
+        $this->form->email = $this->user->email;
+        $this->form->role = $this->user->role;
+        $this->form->password = '';
     }
 
     public function update()
@@ -39,25 +31,28 @@ new class extends Component {
         $imageName = null;
 
         // Save avatar
-        if ($this->avatar) {
+        if ($this->form->avatar) {
             // delete old image
             Storage::disk('public')->delete('avatars/' . $this->user->avatar);
 
             // store image
-            $this->avatar->storeAs('avatars', $this->avatar->hashName(), 'public');
+            $this->form->avatar->storeAs('avatars', $this->form->avatar->hashName(), 'public');
 
             // get image name
-            $imageName = $this->avatar->hashName();
+            $imageName = $this->form->avatar->hashName();
         } else {
             $imageName = $this->user->avatar;
         }
 
+        $password = $this->form->password ? Hash::make($this->form->password) : $this->user->password;
+
         // Update user
         $this->user->update([
-            'name' => $this->name,
-            'email' => $this->email,
+            'name' => $this->form->name,
+            'email' => $this->form->email,
             'avatar' => $imageName,
-            'role' => $this->role,
+            'role' => $this->form->role,
+            'password' => $password,
         ]);
 
         session()->flash('message', 'User updated successfully.');
@@ -72,64 +67,65 @@ new class extends Component {
 };
 ?>
 
-<div class="max-w-7xl mx-auto">
+<div class="mx-auto max-w-7xl">
     <flux:card>
-
         <form wire:submit="update" class="space-y-8">
-
             <!-- Header -->
             <div class="border-b pb-5">
-                <flux:heading size="xl">
-                    Edit User
-                </flux:heading>
+                <flux:heading size="xl"> Edit User </flux:heading>
 
                 <flux:text class="mt-2">
-                    Perbarui informasi di bawah ini untuk mengubah detail pengguna.
+                    Update the information below to change the user's details.
                 </flux:text>
             </div>
 
             <!-- Avatar -->
             <div class="space-y-4">
-
                 <flux:label>Profile Photo</flux:label>
 
                 <div class="flex items-center gap-5">
-
-                    @if ($avatar)
-                        <flux:avatar src="{!! $avatar->temporaryUrl() !!}" size="md" />
-                    @elseif ($user->avatar)
-                        <flux:avatar src="{{ Storage::url('avatars/' . $user->avatar) }}" size="md" />
+                    @if ($this->form->avatar)
+                        <flux:avatar
+                            src="{!! $this->form->avatar->temporaryUrl() !!}"
+                            size="md"
+                        />
+                    @elseif ($this->user->avatar)
+                        <flux:avatar
+                            src="{{ Storage::url('avatars/' . $this->user->avatar) }}"
+                            size="md"
+                        />
                     @else
                         <flux:avatar size="md" />
                     @endif
 
                     <div class="flex-1">
-                        <flux:input type="file" accept="image/*" wire:model="avatar" />
+                        <flux:input
+                            type="file"
+                            accept="image/*"
+                            wire:model="form.avatar"
+                        />
 
                         <flux:text size="sm" class="mt-2">
                             JPG, PNG or WEBP. Maximum 2MB.
                         </flux:text>
 
-                        @error('avatar')
-                            <flux:text class="text-red-500 mt-1">
+                        @error ('form.avatar')
+                            <flux:text class="mt-1 text-red-500">
                                 {{ $message }}
                             </flux:text>
                         @enderror
                     </div>
-
                 </div>
-
             </div>
 
             <!-- Information -->
             <div class="grid gap-6">
-
                 <div class="space-y-2">
                     <flux:label>Name</flux:label>
 
-                    <flux:input wire:model="name" placeholder="John Doe" />
+                    <flux:input wire:model="form.name" placeholder="John Doe" />
 
-                    @error('name')
+                    @error ('form.name')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>
@@ -139,9 +135,48 @@ new class extends Component {
                 <div class="space-y-2">
                     <flux:label>Email</flux:label>
 
-                    <flux:input type="email" wire:model="email" placeholder="john@example.com" />
+                    <flux:input
+                        type="email"
+                        wire:model="form.email"
+                        placeholder="john@example.com"
+                    />
 
-                    @error('email')
+                    @error ('form.email')
+                        <flux:text class="text-red-500">
+                            {{ $message }}
+                        </flux:text>
+                    @enderror
+                </div>
+
+                <div class="space-y-2">
+                    <flux:label>New Password</flux:label>
+
+                    <flux:input
+                        type="password"
+                        wire:model="form.password"
+                        placeholder="••••••••"
+                    />
+
+                    @error ('form.password')
+                        <flux:text class="text-red-500">
+                            {{ $message }}
+                        </flux:text>
+                    @enderror
+                </div>
+
+                <div class="space-y-2">
+                    <flux:label for="confirm_password"
+                        >Confirm Password</flux:label
+                    >
+
+                    <flux:input
+                        type="password"
+                        id="confirm_password"
+                        wire:model="form.password_confirmation"
+                        placeholder="••••••••"
+                    />
+
+                    @error ('form.password_confirmation')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>
@@ -151,30 +186,32 @@ new class extends Component {
                 <div class="space-y-2">
                     <flux:label>Role</flux:label>
 
-                    <flux:select wire:model="role" placeholder="Pilih role...">
-                        <flux:select.option value="admin">admin</flux:select.option>
-                        <flux:select.option value="user">user</flux:select.option>
+                    <flux:select
+                        wire:model="form.role"
+                        placeholder="Select role..."
+                    >
+                        <flux:select.option value="admin">
+                            admin</flux:select.option
+                        >
+                        <flux:select.option value="user">
+                            user</flux:select.option
+                        >
                     </flux:select>
 
-                    @error('role')
+                    @error ('form.role')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>
                     @enderror
                 </div>
-
             </div>
 
             <!-- Footer -->
             <div class="flex justify-end border-t pt-6">
-
                 <flux:button variant="primary" type="submit">
                     Update User
                 </flux:button>
-
             </div>
-
         </form>
-
     </flux:card>
 </div>

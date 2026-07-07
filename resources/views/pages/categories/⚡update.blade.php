@@ -32,44 +32,39 @@ new class extends Component {
             'description' => $this->description,
         ]);
 
-        redirect()->route('genres.index');
+        redirect()->route('categories.index');
 
-        session()->flash('message', 'Genre updated successfully.');
+        session()->flash('message', 'Category updated successfully.');
     }
 
     // Render
     public function render()
     {
-        return $this->view()->layout('layouts::dashboard')->title('Edit Genre');
+        return $this->view()->layout('layouts::dashboard')->title('Edit Category');
     }
 };
 ?>
 
-<div class="max-w-7xl mx-auto">
+<div class="mx-auto max-w-7xl">
     <flux:card>
-
         <form wire:submit="update" class="space-y-8">
-
             <!-- Header -->
             <div class="border-b pb-5">
-                <flux:heading size="xl">
-                    Edit Genre
-                </flux:heading>
+                <flux:heading size="xl"> Edit Category </flux:heading>
 
                 <flux:text class="mt-2">
-                    Isi informasi di bawah ini untuk mengedit genre.
+                    Fill in the information below to edit the category.
                 </flux:text>
             </div>
 
             <!-- Information -->
             <div class="grid gap-6">
-
                 <div class="space-y-2">
-                    <flux:label>Nama genre</flux:label>
+                    <flux:label>Name</flux:label>
 
                     <flux:input wire:model="name" placeholder="John Doe" />
 
-                    @error('name')
+                    @error ('name')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>
@@ -77,11 +72,14 @@ new class extends Component {
                 </div>
 
                 <div class="space-y-2">
-                    <flux:label>Deskripsi</flux:label>
+                    <flux:label>Description</flux:label>
 
-                    <flux:textarea wire:model="description" placeholder="Description" />
+                    <flux:textarea
+                        wire:model="description"
+                        placeholder="Description"
+                    />
 
-                    @error('description')
+                    @error ('description')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>
@@ -91,9 +89,8 @@ new class extends Component {
 
             <!-- Footer -->
             <div class="flex justify-end border-t pt-6">
-
                 <flux:button variant="primary" type="submit">
-                    Update Genre
+                    Update Category
                 </flux:button>
             </div>
         </form>

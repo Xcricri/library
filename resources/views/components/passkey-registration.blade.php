@@ -1,5 +1,5 @@
 @assets
-@vite('resources/js/passkeys.js')
+    @vite ('resources/js/passkeys.js')
 @endassets
 
 <div
@@ -37,7 +37,11 @@
             this.name = this.getDefaultPasskeyName();
             this.updateSupport();
 
-            window.addEventListener('passkeys:ready', () => this.updateSupport(), { once: true });
+            window.addEventListener(
+                'passkeys:ready',
+                () => this.updateSupport(),
+                { once: true },
+            );
         },
         async register() {
             if (!this.name.trim()) return;
@@ -66,7 +70,9 @@
     }"
 >
     <template x-if="!supported">
-        <flux:text>{{ __('Passkeys are not supported in this browser.') }}</flux:text>
+        <flux:text
+            >{{ __('Passkeys are not supported in this browser.') }}</flux:text
+        >
     </template>
 
     <template x-if="supported && !showForm">
@@ -82,7 +88,9 @@
     </template>
 
     <template x-if="supported && showForm">
-        <div class="space-y-4 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50 p-4">
+        <div
+            class="space-y-4 rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-800/50"
+        >
             <flux:input
                 label="{{ __('Passkey name') }}"
                 x-model="name"
@@ -91,9 +99,14 @@
                 x-ref="passkeyNameInput"
                 x-init="$nextTick(() => $refs.passkeyNameInput?.focus())"
             />
-            <flux:text class="!mt-1">{{ __('Give this passkey a name to help you identify it later.') }}</flux:text>
+            <flux:text
+                class="!mt-1"
+                >{{ __('Give this passkey a name to help you identify it later.') }}</flux:text
+            >
 
-            <p x-show="error" x-text="error" x-cloak class="text-sm text-red-600 dark:text-red-400"></p>
+            <p x-show="error" x-text="
+                    error
+                " x-cloak class="text-sm text-red-600 dark:text-red-400"></p>
 
             <div class="flex gap-2">
                 <flux:button
@@ -102,12 +115,13 @@
                     x-bind:disabled="loading || !name.trim()"
                 >
                     <span x-show="!loading">{{ __('Register passkey') }}</span>
-                    <span x-show="loading" x-cloak>{{ __('Registering...') }}</span>
+                    <span
+                        x-show="loading"
+                        x-cloak
+                        >{{ __('Registering...') }}</span
+                    >
                 </flux:button>
-                <flux:button
-                    variant="ghost"
-                    x-on:click="cancel()"
-                >
+                <flux:button variant="ghost" x-on:click="cancel()">
                     {{ __('Cancel') }}
                 </flux:button>
             </div>

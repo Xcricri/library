@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    @include('partials.head')
+    @include ('partials.head')
 </head>
 
 <body>
@@ -14,29 +13,37 @@
             <flux:navbar>
                 @auth
                     @if (auth()->check() && auth()->user()->role === 'admin')
-                        <flux:navbar.item href="{{ route('admin.dashboard') }}"
-                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal"
-                            wire:navigate>
+                        <flux:navbar.item
+                            href="{{ route('admin.dashboard') }}"
+                            class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                            wire:navigate
+                        >
                             Dashboard
                         </flux:navbar.item>
                     @elseif (auth()->check() && auth()->user()->role === 'user')
-                        <flux:navbar.item href="{{ route('user.dashboard') }}"
-                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal"
-                            wire:navigate>
+                        <flux:navbar.item
+                            href="{{ route('user.dashboard') }}"
+                            class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                            wire:navigate
+                        >
                             Dashboard
                         </flux:navbar.item>
                     @endif
                 @else
-                    <flux:navbar.item href="{{ route('login') }}"
-                        class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] text-[#1b1b18] border border-transparent hover:border-[#19140035] dark:hover:border-[#3E3E3A] rounded-sm text-sm leading-normal"
-                        wire:navigate>
+                    <flux:navbar.item
+                        href="{{ route('login') }}"
+                        class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]"
+                        wire:navigate
+                    >
                         Log in
                     </flux:navbar.item>
 
                     @if (Route::has('register'))
-                        <flux:navbar.item href="{{ route('register') }}"
-                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal"
-                            wire:navigate>
+                        <flux:navbar.item
+                            href="{{ route('register') }}"
+                            class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                            wire:navigate
+                        >
                             Register
                         </flux:navbar.item>
                     @endif
@@ -45,11 +52,9 @@
         @endif
     </flux:header>
 
-
     {{ $slot }}
 
     @livewireScripts
     @fluxScripts
 </body>
-
 </html>

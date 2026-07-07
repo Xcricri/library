@@ -3,21 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Loan;
+use App\Models\Borrowing;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
-class LoanController extends Controller
+class BorrowingController extends Controller
 {
-    public function returnBook($loanId)
+    public function returnBook(int $borrowingId)
     {
-        $loan = Loan::findOrFail($loanId);
+        $borrowing = Borrowing::findOrFail($borrowingId);
 
-        $book = Book::findOrFail($loan->book_id);
+        $book = Book::findOrFail($borrowing->book_id);
 
         $today = now()->startOfDay();
-        $dueDate = Carbon::parse($loan->due_date)->startOfDay();
+        $dueDate = Carbon::parse($borrowing->due_date)->startOfDay();
 
         $fine = 0;
         $status = 'returned';
@@ -29,7 +29,7 @@ class LoanController extends Controller
             $fine = $daysLate * 5000;
         }
 
-        $loan->update([
+        $borrowing->update([
             'returned_at' => now()->toDateString(),
             'fine' => $fine,
             'status' => $status
@@ -37,6 +37,6 @@ class LoanController extends Controller
 
         $book->increment('stock');
 
-        return session()->flash('success', 'Buku telah dikembalikan');
+        return redirect()->back()->with('message', 'Book has been returned.');
     }
 }

@@ -32,42 +32,37 @@ new class extends Component {
 
         redirect()->route('genres.index');
 
-        session()->flash('message', 'Genre berhasil di update.');
+        session()->flash('message', 'Genre updated successfully.');
     }
 
     // Render
     public function render()
     {
-        return $this->view()->layout('layouts::dashboard')->title('Edit Genre');
+        return $this->view()->layout('layouts::dashboard')->title('Update Genre');
     }
 };
 ?>
 
-<div class="max-w-7xl mx-auto">
+<div class="mx-auto max-w-7xl">
     <flux:card>
-
         <form wire:submit="update" class="space-y-8">
-
             <!-- Header -->
             <div class="border-b pb-5">
-                <flux:heading size="xl">
-                    Edit Genre
-                </flux:heading>
+                <flux:heading size="xl"> Edit Genre </flux:heading>
 
                 <flux:text class="mt-2">
-                    Isi informasi di bawah ini untuk mengedit genre.
+                    Fill in the information below to edit the genre.
                 </flux:text>
             </div>
 
             <!-- Information -->
             <div class="grid gap-6">
-
                 <div class="space-y-2">
-                    <flux:label>Nama genre</flux:label>
+                    <flux:label>Name</flux:label>
 
                     <flux:input wire:model="name" placeholder="John Doe" />
 
-                    @error('name')
+                    @error ('name')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>
@@ -77,7 +72,6 @@ new class extends Component {
 
             <!-- Footer -->
             <div class="flex justify-end border-t pt-6">
-
                 <flux:button variant="primary" type="submit">
                     Update Genre
                 </flux:button>

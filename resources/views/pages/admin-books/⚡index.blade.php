@@ -101,48 +101,71 @@ new class extends Component {
 ?>
 
 <div class="space-y-6">
-
     {{-- Header --}}
     <div>
         <flux:heading size="lg">
-            Table Buku
+            Table Books
 
-            <flux:text>
-                Daftar Buku di perpustakaan
-            </flux:text>
+            <flux:text> List of Books in the Library </flux:text>
         </flux:heading>
     </div>
 
     {{-- Toolbar --}}
-    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-
-        <div class="grid grid-cols-1 gap-3 sm:flex sm:items-center sm:flex-1 sm:max-w-3xl">
-            <div class="sm:flex-1 min-w-50">
-                <flux:input icon="magnifying-glass" placeholder="Cari buku..." wire:model.live.debounce.300ms="search"
-                    size="sm" clearable />
+    <div
+        class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
+    >
+        <div
+            class="grid grid-cols-1 gap-3 sm:flex sm:max-w-3xl sm:flex-1 sm:items-center"
+        >
+            <div class="min-w-50 sm:flex-1">
+                <flux:input
+                    icon="magnifying-glass"
+                    placeholder="Search books..."
+                    wire:model.live.debounce.300ms="search"
+                    size="sm"
+                    clearable
+                />
             </div>
 
             <div class="w-full sm:w-40">
-                <flux:select wire:model.live="statusFilter" placeholder="Pilih status..." size="sm">
-                    <flux:select.option value="all">Semua Status</flux:select.option>
-                    <flux:select.option value="active">Aktif</flux:select.option>
-                    <flux:select.option value="trashed">Non-Aktif</flux:select.option>
+                <flux:select
+                    wire:model.live="statusFilter"
+                    placeholder="Select status..."
+                    size="sm"
+                >
+                    <flux:select.option value="all">
+                        All Status</flux:select.option
+                    >
+                    <flux:select.option value="active">
+                        Active</flux:select.option
+                    >
+                    <flux:select.option value="trashed">
+                        Trash</flux:select.option
+                    >
                 </flux:select>
             </div>
 
             <div class="w-full sm:w-44">
-                <flux:input type="date" wire:model.live.debounce.300ms="date" size="sm" />
+                <flux:input
+                    type="date"
+                    wire:model.live.debounce.300ms="date"
+                    size="sm"
+                />
             </div>
-
         </div>
 
-        <div class="flex justify-end w-full md:w-auto">
-            <flux:button href="{{ route('admin.books.create') }}" wire:navigate variant="primary" size="sm"
-                icon="plus" class="w-full md:w-auto">
-                Tambah Buku
+        <div class="flex w-full justify-end md:w-auto">
+            <flux:button
+                href="{{ route('admin.books.create') }}"
+                wire:navigate
+                variant="primary"
+                size="sm"
+                icon="plus"
+                class="w-full md:w-auto"
+            >
+                Add Buku
             </flux:button>
         </div>
-
     </div>
 
     {{-- Flash message --}}
@@ -155,15 +178,14 @@ new class extends Component {
     {{-- Table --}}
     <div class="overflow-x-auto">
         <flux:table>
-
             <flux:table.columns>
-                <flux:table.column>Nomor</flux:table.column>
-                <flux:table.column>Judul</flux:table.column>
-                <flux:table.column>Penulis</flux:table.column>
-                <flux:table.column>Penerbit</flux:table.column>
-                <flux:table.column>Tahun Terbit</flux:table.column>
-                <flux:table.column>Cover Buku</flux:table.column>
-                <flux:table.column>Stock Buku</flux:table.column>
+                <flux:table.column>Number</flux:table.column>
+                <flux:table.column>Title</flux:table.column>
+                <flux:table.column>Author</flux:table.column>
+                <flux:table.column>Publisher</flux:table.column>
+                <flux:table.column>Publication Date</flux:table.column>
+                <flux:table.column>Book Cover</flux:table.column>
+                <flux:table.column>Book Stock</flux:table.column>
                 <flux:table.column class="text-right">Action</flux:table.column>
             </flux:table.columns>
 
@@ -178,9 +200,7 @@ new class extends Component {
                             {{ $book->title }}
                         </flux:table.cell>
 
-                        <flux:table.cell>
-                            {{ $book->author }}
-                        </flux:table.cell>
+                        <flux:table.cell> {{ $book->author }} </flux:table.cell>
 
                         <flux:table.cell>
                             {{ $book->publisher_name }}
@@ -191,42 +211,69 @@ new class extends Component {
                         </flux:table.cell>
 
                         <flux:table.cell class="py-1">
-                            <img src="{{ Storage::url('covers/' . $book->cover) }}" class="w-9 aspect-2/3 rounded"
-                                alt="{{ $book->title }}" />
+                            <img
+                                src="{{ Storage::url('covers/' . $book->cover) }}"
+                                class="aspect-2/3 w-9 rounded"
+                                alt="{{ $book->title }}"
+                            />
                         </flux:table.cell>
 
-                        <flux:table.cell>
-                            {{ $book->stock }}
-                        </flux:table.cell>
+                        <flux:table.cell> {{ $book->stock }} </flux:table.cell>
 
                         <flux:table.cell>
                             @if ($book->trashed())
-                                <flux:modal.trigger name="restore-book-{{ $book->id }}">
-                                    <flux:badge color="blue" size="sm" class="cursor-pointer">
+                                <flux:modal.trigger
+                                    name="restore-book-{{ $book->id }}"
+                                >
+                                    <flux:badge
+                                        color="blue"
+                                        size="sm"
+                                        class="cursor-pointer"
+                                    >
                                         Restore
                                     </flux:badge>
                                 </flux:modal.trigger>
 
-                                <flux:modal.trigger name="delete-forced-book-{{ $book->id }}">
-                                    <flux:badge color="red" size="sm" class="cursor-pointer">
+                                <flux:modal.trigger
+                                    name="delete-forced-book-{{ $book->id }}"
+                                >
+                                    <flux:badge
+                                        color="red"
+                                        size="sm"
+                                        class="cursor-pointer"
+                                    >
                                         Delete permanent
                                     </flux:badge>
                                 </flux:modal.trigger>
                             @else
-                                <flux:badge color="green" size="sm"
-                                    href="{{ route('admin.books.show', $book->slug) }}" wire:navigate
-                                    class="cursor-pointer">
-                                    Show
+                                <flux:badge
+                                    color="green"
+                                    size="sm"
+                                    href="{{ route('admin.books.view', $book->slug) }}"
+                                    wire:navigate
+                                    class="cursor-pointer"
+                                >
+                                    view
                                 </flux:badge>
 
-                                <flux:badge color="yellow" size="sm"
-                                    href="{{ route('admin.books.update', $book->id) }}" wire:navigate
-                                    class="cursor-pointer">
+                                <flux:badge
+                                    color="yellow"
+                                    size="sm"
+                                    href="{{ route('admin.books.update', $book->id) }}"
+                                    wire:navigate
+                                    class="cursor-pointer"
+                                >
                                     Edit
                                 </flux:badge>
 
-                                <flux:modal.trigger name="soft-delete-book-{{ $book->id }}">
-                                    <flux:badge color="red" size="sm" class="cursor-pointer">
+                                <flux:modal.trigger
+                                    name="soft-delete-book-{{ $book->id }}"
+                                >
+                                    <flux:badge
+                                        color="red"
+                                        size="sm"
+                                        class="cursor-pointer"
+                                    >
                                         Delete
                                     </flux:badge>
                                 </flux:modal.trigger>
@@ -235,18 +282,27 @@ new class extends Component {
                     </flux:table.row>
 
                     {{-- Soft Delete Book Modal --}}
-                    <flux:modal name="soft-delete-book-{{ $book->id }}" class="md:w-96">
+                    <flux:modal
+                        name="soft-delete-book-{{ $book->id }}"
+                        class="md:w-96"
+                    >
                         <div class="space-y-6">
                             <div>
-                                <flux:heading size="lg">Soft Delete Book</flux:heading>
-                                <flux:text class="mt-2">Are you sure you want to soft delete this book? This action
-                                    can be reversed later.
+                                <flux:heading size="lg"
+                                    >Soft Delete Book</flux:heading
+                                >
+                                <flux:text class="mt-2"
+                                    >Are you sure you want to soft delete this
+                                    book? This action can be reversed later.
                                 </flux:text>
                             </div>
                             <div class="flex">
                                 <flux:spacer />
-                                <flux:button type="submit" variant="primary"
-                                    wire:click="softDelete({{ $book->id }})">
+                                <flux:button
+                                    type="submit"
+                                    variant="primary"
+                                    wire:click="softDelete({{ $book->id }})"
+                                >
                                     Delete
                                 </flux:button>
                             </div>
@@ -254,17 +310,26 @@ new class extends Component {
                     </flux:modal>
 
                     {{-- Restore Book Modal --}}
-                    <flux:modal name="restore-book-{{ $book->id }}" class="md:w-96">
+                    <flux:modal
+                        name="restore-book-{{ $book->id }}"
+                        class="md:w-96"
+                    >
                         <div class="space-y-6">
                             <div>
-                                <flux:heading size="lg">Restore Book</flux:heading>
-                                <flux:text class="mt-2">Are you sure you want to restore this book?
+                                <flux:heading size="lg"
+                                    >Restore Book</flux:heading
+                                >
+                                <flux:text class="mt-2"
+                                    >Are you sure you want to restore this book?
                                 </flux:text>
                             </div>
                             <div class="flex">
                                 <flux:spacer />
-                                <flux:button type="submit" variant="primary"
-                                    wire:click="restore({{ $book->id }})">
+                                <flux:button
+                                    type="submit"
+                                    variant="primary"
+                                    wire:click="restore({{ $book->id }})"
+                                >
                                     Restore
                                 </flux:button>
                             </div>
@@ -272,18 +337,27 @@ new class extends Component {
                     </flux:modal>
 
                     {{-- Delete Forced Book Modal --}}
-                    <flux:modal name="delete-forced-book-{{ $book->id }}" class="md:w-96">
+                    <flux:modal
+                        name="delete-forced-book-{{ $book->id }}"
+                        class="md:w-96"
+                    >
                         <div class="space-y-6">
                             <div>
-                                <flux:heading size="lg">Delete Forced Book</flux:heading>
-                                <flux:text class="mt-2">Are you sure you want to delete this book? This action
-                                    cannot be undone.
+                                <flux:heading size="lg"
+                                    >Delete Forced Book</flux:heading
+                                >
+                                <flux:text class="mt-2"
+                                    >Are you sure you want to delete this book?
+                                    This action cannot be undone.
                                 </flux:text>
                             </div>
                             <div class="flex">
                                 <flux:spacer />
-                                <flux:button type="submit" variant="primary"
-                                    wire:click="forceDelete({{ $book->id }})">
+                                <flux:button
+                                    type="submit"
+                                    variant="primary"
+                                    wire:click="forceDelete({{ $book->id }})"
+                                >
                                     Delete permanent
                                 </flux:button>
                             </div>
@@ -291,13 +365,15 @@ new class extends Component {
                     </flux:modal>
                 @empty
                     <flux:table.row>
-                        <flux:table.cell colspan="8" class="text-center py-6 text-gray-500">
+                        <flux:table.cell
+                            colspan="8"
+                            class="py-6 text-center text-gray-500"
+                        >
                             No books found.
                         </flux:table.cell>
                     </flux:table.row>
                 @endforelse
             </flux:table.rows>
-
         </flux:table>
     </div>
 
@@ -305,5 +381,4 @@ new class extends Component {
     <div>
         <flux:pagination :paginator="$books" />
     </div>
-
 </div>

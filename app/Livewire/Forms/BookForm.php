@@ -5,7 +5,7 @@ namespace App\Livewire\Forms;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
-class FormBook extends Form
+class BookForm extends Form
 {
     public $slug;
 
@@ -20,9 +20,6 @@ class FormBook extends Form
 
     #[Validate(['nullable', 'image', 'max:2048'])]
     public $cover;
-
-    #[Validate('nullable|file|mimes:pdf|max:12288')]
-    public $ebook_file;
 
     #[Validate('nullable|string|size:13')]
     public $isbn;

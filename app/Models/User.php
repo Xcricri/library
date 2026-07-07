@@ -3,7 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\Loan;
+use App\Models\Borrowing;
 use App\Models\Review;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -60,6 +60,11 @@ class User extends Authenticatable implements PasskeyUser
         'deleted_at'
     ];
 
+    public function hasBorrowed(Book $book)
+    {
+        return $this->borrowings()->where('book_id', $book->id)->where('status', 'borrowed')->exists();
+    }
+
     /**
      * Get the user's initials
      */
@@ -74,12 +79,12 @@ class User extends Authenticatable implements PasskeyUser
 
 
     /**
-     * Summary of loans
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Loan, User>
+     * Summary of borrowings
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Borrowing, User>
      */
-    public function loans()
+    public function borrowings()
     {
-        return $this->hasMany(Loan::class);
+        return $this->hasMany(Borrowing::class);
     }
 
     /**

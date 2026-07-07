@@ -1,28 +1,16 @@
 <?php
 
 use Livewire\Component;
-use Livewire\Attributes\Validate;
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Livewire\WithFileUploads;
+use App\Livewire\Forms\UserForm;
+
+use App\Models\User;
 
 new class extends Component {
     use WithFileUploads;
 
-    #[Validate('min:5|required|string|max:255')]
-    public $name;
-
-    #[Validate('min:5|required|email|unique:users')]
-    public $email;
-
-    #[Validate('min:8|required|string|confirmed')]
-    public $password;
-
-    #[Validate('nullable|image|max:2048')]
-    public $avatar;
-
-    #[Validate('required|in:admin,user')]
-    public $role = '';
+    public UserForm $form;
 
     public function save()
     {
@@ -31,21 +19,21 @@ new class extends Component {
         $imageName = null;
 
         // Save avatar
-        if ($this->avatar) {
-            $imageName = $this->avatar->hashName();
-            $this->avatar->storeAs('avatars', $imageName, 'public');
+        if ($this->form->avatar) {
+            $imageName = $this->form->avatar->hashName();
+            $this->form->avatar->storeAs('avatars', $imageName, 'public');
         }
 
         // Create user
         User::create([
-            'name' => $this->name,
-            'email' => $this->email,
-            'password' => Hash::make($this->password),
+            'name' => $this->form->name,
+            'email' => $this->form->email,
+            'password' => Hash::make($this->form->password),
             'avatar' => $imageName,
-            'role' => $this->role,
+            'role' => $this->form->role,
         ]);
 
-        session()->flash('message', 'User berhasil ditambahkan.');
+        session()->flash('message', 'User created successfully.');
 
         redirect()->route('users.index');
     }
@@ -57,32 +45,29 @@ new class extends Component {
 };
 ?>
 
-<div class="max-w-7xl mx-auto">
+<div class="mx-auto max-w-7xl">
     <flux:card>
-
         <form wire:submit="save" class="space-y-8">
-
             <!-- Header -->
             <div class="border-b pb-5">
-                <flux:heading size="xl">
-                    Tambah User
-                </flux:heading>
+                <flux:heading size="xl"> Add User </flux:heading>
 
                 <flux:text class="mt-2">
-                    Isi informasi di bawah ini untuk membuat pengguna baru.
+                    Fill in the information below to create a new user.
                 </flux:text>
             </div>
 
             <!-- Avatar -->
             <div class="space-y-4">
-
                 <flux:label>Profile Photo</flux:label>
 
                 <div class="flex items-center gap-5">
-
-                    @if ($avatar)
-                        <flux:avatar src="{!! $avatar->temporaryUrl() !!}" size="md" />
-                        <div wire:loading wire:target="avatar">
+                    @if ($this->form->avatar)
+                        <flux:avatar
+                            src="{!! $this->form->avatar->temporaryUrl() !!}"
+                            size="md"
+                        />
+                        <div wire:loading wire:target="form.avatar">
                             Uploading...
                         </div>
                     @else
@@ -90,32 +75,33 @@ new class extends Component {
                     @endif
 
                     <div class="flex-1">
-                        <flux:input type="file" accept="image/*" wire:model="avatar" />
+                        <flux:input
+                            type="file"
+                            accept="image/*"
+                            wire:model="form.avatar"
+                        />
 
                         <flux:text size="sm" class="mt-2">
                             JPG, PNG or WEBP. Maximum 2MB.
                         </flux:text>
 
-                        @error('avatar')
-                            <flux:text class="text-red-500 mt-1">
+                        @error ('form.avatar')
+                            <flux:text class="mt-1 text-red-500">
                                 {{ $message }}
                             </flux:text>
                         @enderror
                     </div>
-
                 </div>
-
             </div>
 
             <!-- Information -->
             <div class="grid gap-6">
-
                 <div class="space-y-2">
-                    <flux:label>Nama user</flux:label>
+                    <flux:label>Name</flux:label>
 
-                    <flux:input wire:model="name" placeholder="John Doe" />
+                    <flux:input wire:model="form.name" placeholder="John Doe" />
 
-                    @error('name')
+                    @error ('form.name')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>
@@ -125,9 +111,13 @@ new class extends Component {
                 <div class="space-y-2">
                     <flux:label>Email</flux:label>
 
-                    <flux:input type="email" wire:model="email" placeholder="john@example.com" />
+                    <flux:input
+                        type="email"
+                        wire:model="form.email"
+                        placeholder="john@example.com"
+                    />
 
-                    @error('email')
+                    @error ('form.email')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>
@@ -135,14 +125,21 @@ new class extends Component {
                 </div>
 
                 <div class="space-y-2">
-                    <flux:label>Peran</flux:label>
+                    <flux:label>Role</flux:label>
 
-                    <flux:select wire:model="role" placeholder="Pilih role...">
-                        <flux:select.option value="admin">admin</flux:select.option>
-                        <flux:select.option value="user">user</flux:select.option>
+                    <flux:select
+                        wire:model="form.role"
+                        placeholder="Select role..."
+                    >
+                        <flux:select.option value="admin">
+                            admin</flux:select.option
+                        >
+                        <flux:select.option value="user">
+                            user</flux:select.option
+                        >
                     </flux:select>
 
-                    @error('role')
+                    @error ('form.role')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>
@@ -152,27 +149,45 @@ new class extends Component {
                 <div class="space-y-2">
                     <flux:label>Password</flux:label>
 
-                    <flux:input type="password" wire:model="password" placeholder="••••••••" />
+                    <flux:input
+                        type="password"
+                        wire:model="form.password"
+                        placeholder="••••••••"
+                    />
 
-                    @error('password')
+                    @error ('form.password')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>
                     @enderror
                 </div>
 
+                <div class="space-y-2">
+                    <flux:label for="confirm_password"
+                        >Confirm Password</flux:label
+                    >
+
+                    <flux:input
+                        type="password"
+                        id="confirm_password"
+                        wire:model="form.password_confirmation"
+                        placeholder="••••••••"
+                    />
+
+                    @error ('form.password_confirmation')
+                        <flux:text class="text-red-500">
+                            {{ $message }}
+                        </flux:text>
+                    @enderror
+                </div>
             </div>
 
             <!-- Footer -->
             <div class="flex justify-end border-t pt-6">
-
                 <flux:button variant="primary" type="submit">
                     Create User
                 </flux:button>
-
             </div>
-
         </form>
-
     </flux:card>
 </div>
