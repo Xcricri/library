@@ -37,93 +37,116 @@ new class extends Component {
 };
 ?>
 
-<div class="mx-auto max-w-7xl py-8">
-    <flux:card class="overflow-hidden">
-        {{-- Flash message --}}
-        @if (session()->has('message'))
-            <flux:callout variant="success" class="space-y-3">
-                {{ session('message') }}
-            </flux:callout>
-        @endif
+<div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+    {{-- Flash message --}}
+    @if (session()->has('message'))
+        <flux:callout variant="success" class="mb-6 shadow-sm animate-fade-in">
+            {{ session('message') }}
+        </flux:callout>
+    @endif
 
-        <div class="grid gap-10 p-8 lg:grid-cols-3">
-            {{-- Cover --}}
-            <div class="space-y-5 lg:col-span-1">
-                <div class="overflow-hidden rounded-2xl shadow-lg">
-                    <img
-                        src="{{ Storage::url('covers/' . $book->cover) }}"
-                        alt="{{ $book->title }}"
-                        class="aspect-2/3 w-full object-cover"
-                    />
+    <flux:card class="overflow-hidden shadow-md border border-zinc-100 dark:border-zinc-800">
+        <div class="grid gap-8 p-6 sm:p-10 lg:grid-cols-4">
+
+            {{-- Bagian Kiri: Cover & Aksi --}}
+            <div class="space-y-6 lg:col-span-1">
+                <div class="overflow-hidden rounded-xl shadow-lg transition-transform duration-300 hover:scale-[1.02]">
+                    <img src="{{ Storage::url('covers/' . $book->cover) }}" alt="{{ $book->title }}"
+                        class="aspect-2/3 w-full object-cover" />
                 </div>
 
-                @auth
-                    @if (auth()->user()->role === 'user')
-                        @if (auth()->user()->hasBorrowed($book))
-                            <flux:text class="text-center text-red-500">
-                                You have borrowed this book.
-                            </flux:text>
-                        @else
-                            <livewire:borrowing.modal :book="$book" />
+                <div class="pt-2">
+                    @auth
+                        @if (auth()->user()->role === 'user')
+                            @if (auth()->user()->hasBorrowed($book))
+                                <div
+                                    class="flex items-center justify-center gap-2 rounded-lg bg-red-50 p-3 text-sm font-medium text-red-600 dark:bg-red-950/30 dark:text-red-400">
+                                    <flux:icon name="exclamation-triangle" class="size-4 shrink-0" />
+                                    <span>You have borrowed this book.</span>
+                                </div>
+                            @else
+                                <livewire:modal.borrowing :book="$book" />
+                            @endif
                         @endif
-                    @endif
-                @else
-                    <flux:button
-                        variant="primary"
-                        icon="book-open"
-                        class="w-full"
-                        href="{{ route('login') }}"
-                    >
-                        Login for borrow book
-                    </flux:button>
-
-                @endauth
-            </div>
-
-            {{-- Detail --}}
-            <div class="space-y-8 lg:col-span-2">
-                <div class="space-y-2">
-                    <flux:heading size="xl"> {{ $book->title }} </flux:heading>
-
-                    <flux:text class="text-primary font-medium">
-                        {{ $book->author }}
-                    </flux:text>
-
-                    <flux:text class="mt-1 font-semibold">
-                        {{ $book->publisher_name }}
-                    </flux:text>
-
-                    <flux:text class="mt-1 font-semibold">
-                        {{ Carbon::parse($book->published_at)->format('Y') }}
-                    </flux:text>
-                </div>
-
-                <div class="flex flex-wrap gap-2">
-                    @foreach ($book->categories as $category)
-                        <flux:badge variant="neutral">
-                            {{ $category->name }}
-                        </flux:badge>
-                    @endforeach
-
-                    @foreach ($book->genres as $genre)
-                        <flux:badge variant="brand">
-                            {{ $genre->name }}
-                        </flux:badge>
-                    @endforeach
-                </div>
-
-                <flux:separator />
-
-                <div class="space-y-4">
-                    <flux:heading size="lg"> Synopsis </flux:heading>
-
-                    <flux:text
-                        class="leading-8 whitespace-pre-line text-zinc-600 dark:text-zinc-300"
-                    >
-                        {{ $book->description }}
-                    </flux:text>
+                    @else
+                        <flux:button variant="primary" icon="book-open" class="w-full shadow-sm"
+                            href="{{ route('login') }}">
+                            Login to Borrow
+                        </flux:button>
+                    @endauth
                 </div>
             </div>
+
+            {{-- Bagian Kanan: Detail Informasi --}}
+            <div class="space-y-6 lg:col-span-3 flex flex-col justify-between">
+                <div class="space-y-5">
+                    {{-- Judul & Penulis --}}
+                    <div class="space-y-1">
+                        <flux:heading size="2xl" class="font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+                            {{ $book->title }}
+                        </flux:heading>
+
+                        <flux:text size="lg" class="text-primary font-semibold tracking-wide">
+                            {{ $book->author }}
+                        </flux:text>
+                    </div>
+
+                    {{-- Metadata Buku (Penerbit & Tahun) --}}
+                    <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-zinc-500 dark:text-zinc-400">
+                        <span class="font-medium">{{ $book->publisher_name }}</span>
+                        <span class="text-zinc-300 dark:text-zinc-700">•</span>
+                        <span>{{ Carbon::parse($book->published_at)->format('Y') }}</span>
+                    </div>
+
+                    {{-- Grup Badge: Genre & Kategori Terpisah --}}
+                    <div class="space-y-3 pt-1">
+                        {{-- Baris Atas: Genre --}}
+                        @if ($book->genres->isNotEmpty())
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span
+                                    class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 w-20 shrink-0">Genre:</span>
+                                <div class="flex flex-wrap gap-1.5">
+                                    @foreach ($book->genres as $genre)
+                                        <flux:badge variant="brand" size="sm" class="rounded-md">
+                                            {{ $genre->name }}
+                                        </flux:badge>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
+                        {{-- Baris Bawah: Kategori --}}
+                        @if ($book->categories->isNotEmpty())
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span
+                                    class="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 w-20 shrink-0">Category:</span>
+                                <div class="flex flex-wrap gap-1.5">
+                                    @foreach ($book->categories as $category)
+                                        <flux:badge variant="neutral" size="sm" class="rounded-md">
+                                            {{ $category->name }}
+                                        </flux:badge>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+
+                    <flux:separator class="my-4" />
+
+                    {{-- Sinopsis --}}
+                    <div class="space-y-3">
+                        <flux:heading size="lg" class="font-semibold text-zinc-800 dark:text-zinc-200">
+                            Synopsis
+                        </flux:heading>
+
+                        <flux:text
+                            class="leading-7 whitespace-pre-line text-zinc-600 dark:text-zinc-300 text-sm sm:text-base">
+                            {{ $book->description }}
+                        </flux:text>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </flux:card>
 </div>

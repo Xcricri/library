@@ -65,31 +65,19 @@ new class extends Component {
     </div>
 
     {{-- Toolbar --}}
-    <div
-        class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
-    >
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div class="w-full md:max-w-sm">
-            <flux:input
-                wire:model.live.debounce.300ms="search"
-                icon="magnifying-glass"
-                placeholder="Cari buku..."
-                size="sm"
-            />
+            <flux:input wire:model.live.debounce.300ms="search" icon="magnifying-glass" placeholder="Cari buku..."
+                size="sm" />
         </div>
 
         <div class="w-full sm:w-48">
-            <flux:select
-                wire:model.live="statusFiltered"
-                placeholder="Pilih Status"
-                size="sm"
-            >
+            <flux:select wire:model.live="statusFiltered" placeholder="Pilih Status" size="sm">
                 <flux:select.option value="all">All</flux:select.option>
                 <flux:select.option value="borrowed">
-                    Borrowed</flux:select.option
-                >
+                    Borrowed</flux:select.option>
                 <flux:select.option value="returned">
-                    Returned</flux:select.option
-                >
+                    Returned</flux:select.option>
                 <flux:select.option value="overdue">Overdue</flux:select.option>
             </flux:select>
         </div>
@@ -117,40 +105,27 @@ new class extends Component {
                 @forelse ($borrowings as $borrowing)
                     <flux:table.row>
                         <flux:table.cell>
-                            {{ $loop->iteration }}</flux:table.cell
-                        >
+                            {{ $loop->iteration }}</flux:table.cell>
                         <flux:table.cell>
-                            <img
-                                src="{{ Storage::url('covers/' . $borrowing->book->cover) }}"
-                                alt="{{ $borrowing->book->title }}"
-                                class="aspect-2/3 w-9 rounded"
-                            />
+                            <img src="{{ Storage::url('covers/' . $borrowing->book->cover) }}"
+                                alt="{{ $borrowing->book->title }}" class="aspect-2/3 w-9 rounded" />
                         </flux:table.cell>
                         <flux:table.cell>
-                            {{ $borrowing->book->title }}</flux:table.cell
-                        >
+                            {{ $borrowing->book->title }}</flux:table.cell>
                         <flux:table.cell>
-                            @foreach ($borrowing->book->genres as $genre)
-                                {{ $genre->name }}
-                            @endforeach
+                            {{ $borrowing->book->genres->pluck('name')->join(', ') }}
                         </flux:table.cell>
                         <flux:table.cell class="py-0">
                             @if ($borrowing->status === 'borrowed')
-                                <flux:button
-                                    variant="danger"
-                                    class="pointer"
-                                    size="sm"
-                                    href="{{ route('user.books.return', $borrowing->id) }}"
-                                    >Return Book
+                                <flux:button variant="primary" color="red" class="pointer" size="sm"
+                                    href="{{ route('user.books.return', $borrowing->id) }} "
+                                    wire:click="returnBook({{ $borrowing->id }})">
+                                    Return Book
                                 </flux:button>
                             @elseif ($borrowing->status === 'overdue')
-                                <flux:badge color="red" size="sm"
-                                    >Book is overdue</flux:badge
-                                >
+                                <flux:badge color="red" size="sm">Book is overdue</flux:badge>
                             @elseif ($borrowing->status === 'returned')
-                                <flux:badge color="green" size="sm"
-                                    >Book has been returned</flux:badge
-                                >
+                                <flux:badge color="blue" size="sm">Book has been returned</flux:badge>
                             @endif
                         </flux:table.cell>
                     </flux:table.row>
@@ -163,5 +138,10 @@ new class extends Component {
                 @endforelse
             </flux:table.rows>
         </flux:table>
+    </div>
+
+    {{-- Pagination --}}
+    <div>
+        <flux:pagination :paginator="$borrowings" />
     </div>
 </div>

@@ -34,7 +34,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::prefix('admin/books')->name('admin.books.')->group(function () {
         Route::livewire('/index', 'pages::admin-books.index')->name('index');
-        Route::livewire('/view/{slug}', 'pages::admin-books.view')->name('view');
         Route::livewire('/create', 'pages::admin-books.create')->name('create');
         Route::livewire('/update/{id}', 'pages::admin-books.update')->name('update');
     });
@@ -51,6 +50,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('user/books')->name('user.books.')->group(function () {
         Route::get('/return/{id}', [BorrowingController::class, 'returnBook'])->name('return');
         Route::livewire('/index', 'pages::user-books.index')->name('index');
+    });
+
+    Route::prefix('user/wishlist')->name('wishlists.')->group(function () {
+        Route::livewire('/index', 'pages::wishlists.index')->name('index');
     });
 });
 

@@ -3,8 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Book;
 use App\Models\Borrowing;
 use App\Models\Review;
+use App\Models\Wishlist;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -94,5 +96,14 @@ class User extends Authenticatable implements PasskeyUser
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Summary of wishlist
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Wishlist, User>
+     */
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
     }
 }

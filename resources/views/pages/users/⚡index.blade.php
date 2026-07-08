@@ -93,48 +93,27 @@ new class extends Component {
     </div>
 
     {{-- Toolbar --}}
-    <div
-        class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
-    >
-        <div
-            class="grid grid-cols-1 gap-3 sm:flex sm:max-w-3xl sm:flex-1 sm:items-center"
-        >
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div class="grid grid-cols-1 gap-3 sm:flex sm:max-w-3xl sm:flex-1 sm:items-center">
             <div class="w-full md:max-w-sm">
-                <flux:input
-                    icon="magnifying-glass"
-                    placeholder="Cari user..."
-                    wire:model.live.debounce.300ms="search"
-                    size="sm"
-                    clearable
-                />
+                <flux:input icon="magnifying-glass" placeholder="Cari user..." wire:model.live.debounce.300ms="search"
+                    size="sm" clearable />
             </div>
 
             <div class="w-full sm:w-40">
-                <flux:select
-                    wire:model.live="statusFilter"
-                    placeholder="Pilih status..."
-                    size="sm"
-                >
+                <flux:select wire:model.live="statusFilter" placeholder="Pilih status..." size="sm">
                     <flux:select.option value="all">All</flux:select.option>
                     <flux:select.option value="active">
-                        Active</flux:select.option
-                    >
+                        Active</flux:select.option>
                     <flux:select.option value="trashed">
-                        Trash</flux:select.option
-                    >
+                        Trash</flux:select.option>
                 </flux:select>
             </div>
         </div>
 
         <div class="flex w-full justify-end md:w-auto">
-            <flux:button
-                href="{{ route('users.create') }}"
-                wire:navigate
-                variant="primary"
-                size="sm"
-                icon="plus"
-                class="w-full md:w-auto"
-            >
+            <flux:button href="{{ route('users.create') }}" wire:navigate variant="primary" size="sm"
+                class="w-full md:w-auto">
                 Add User
             </flux:button>
         </div>
@@ -176,10 +155,7 @@ new class extends Component {
 
                         <flux:table.cell class="py-1">
                             @if ($user->avatar)
-                                <flux:avatar
-                                    src="{{ Storage::url('avatars/' . $user->avatar) }}"
-                                    class="h-9 w-9"
-                                />
+                                <flux:avatar src="{{ Storage::url('avatars/' . $user->avatar) }}" class="h-9 w-9" />
                             @else
                                 <flux:avatar class="h-9 w-9" />
                             @endif
@@ -187,48 +163,25 @@ new class extends Component {
 
                         <flux:table.cell>
                             @if ($user->trashed())
-                                <flux:modal.trigger
-                                    name="restore-user-{{ $user->id }}"
-                                >
-                                    <flux:badge
-                                        color="blue"
-                                        size="sm"
-                                        class="cursor-pointer"
-                                    >
+                                <flux:modal.trigger name="restore-user-{{ $user->id }}">
+                                    <flux:badge color="blue" size="sm" class="cursor-pointer">
                                         Restore
                                     </flux:badge>
                                 </flux:modal.trigger>
 
-                                <flux:modal.trigger
-                                    name="delete-forced-user-{{ $user->id }}"
-                                >
-                                    <flux:badge
-                                        color="red"
-                                        size="sm"
-                                        class="cursor-pointer"
-                                    >
+                                <flux:modal.trigger name="delete-forced-user-{{ $user->id }}">
+                                    <flux:badge color="red" size="sm" class="cursor-pointer">
                                         Delete permanent
                                     </flux:badge>
                                 </flux:modal.trigger>
                             @else
-                                <flux:badge
-                                    color="yellow"
-                                    size="sm"
-                                    href="{{ route('users.edit', $user->id) }}"
-                                    wire:navigate
-                                    class="cursor-pointer"
-                                >
+                                <flux:badge color="yellow" size="sm" href="{{ route('users.edit', $user->id) }}"
+                                    wire:navigate class="cursor-pointer">
                                     Edit
                                 </flux:badge>
 
-                                <flux:modal.trigger
-                                    name="soft-delete-user-{{ $user->id }}"
-                                >
-                                    <flux:badge
-                                        color="red"
-                                        size="sm"
-                                        class="cursor-pointer"
-                                    >
+                                <flux:modal.trigger name="soft-delete-user-{{ $user->id }}">
+                                    <flux:badge color="red" size="sm" class="cursor-pointer">
                                         Delete
                                     </flux:badge>
                                 </flux:modal.trigger>
@@ -237,27 +190,18 @@ new class extends Component {
                     </flux:table.row>
 
                     {{-- soft delete User Modal --}}
-                    <flux:modal
-                        name="soft-delete-user-{{ $user->id }}"
-                        class="md:w-96"
-                    >
+                    <flux:modal name="soft-delete-user-{{ $user->id }}" class="md:w-96">
                         <div class="space-y-6">
                             <div>
-                                <flux:heading size="lg"
-                                    >Soft Delete User</flux:heading
-                                >
-                                <flux:text class="mt-2"
-                                    >Are you sure you want to soft delete this
+                                <flux:heading size="lg">Soft Delete User</flux:heading>
+                                <flux:text class="mt-2">Are you sure you want to soft delete this
                                     user? This action can be undone later.
                                 </flux:text>
                             </div>
                             <div class="flex">
                                 <flux:spacer />
-                                <flux:button
-                                    type="submit"
-                                    variant="primary"
-                                    wire:click="softDelete({{ $user->id }})"
-                                >
+                                <flux:button type="submit" variant="primary"
+                                    wire:click="softDelete({{ $user->id }})">
                                     Soft Delete
                                 </flux:button>
                             </div>
@@ -265,27 +209,18 @@ new class extends Component {
                     </flux:modal>
 
                     {{-- force delete User Modal --}}
-                    <flux:modal
-                        name="force-delete-user-{{ $user->id }}"
-                        class="md:w-96"
-                    >
+                    <flux:modal name="force-delete-user-{{ $user->id }}" class="md:w-96">
                         <div class="space-y-6">
                             <div>
-                                <flux:heading size="lg"
-                                    >Force Delete User</flux:heading
-                                >
-                                <flux:text class="mt-2"
-                                    >Are you sure you want to force delete this
+                                <flux:heading size="lg">Force Delete User</flux:heading>
+                                <flux:text class="mt-2">Are you sure you want to force delete this
                                     user? This action cannot be undone.
                                 </flux:text>
                             </div>
                             <div class="flex">
                                 <flux:spacer />
-                                <flux:button
-                                    type="submit"
-                                    variant="primary"
-                                    wire:click="forceDelete({{ $user->id }})"
-                                >
+                                <flux:button type="submit" variant="primary"
+                                    wire:click="forceDelete({{ $user->id }})">
                                     Force Delete
                                 </flux:button>
                             </div>
@@ -293,27 +228,18 @@ new class extends Component {
                     </flux:modal>
 
                     {{-- Soft Delete User Modal --}}
-                    <flux:modal
-                        name="restore-user-{{ $user->id }}"
-                        class="md:w-96"
-                    >
+                    <flux:modal name="restore-user-{{ $user->id }}" class="md:w-96">
                         <div class="space-y-6">
                             <div>
-                                <flux:heading size="lg"
-                                    >Restore User</flux:heading
-                                >
-                                <flux:text class="mt-2"
-                                    >Are you sure you want to restore this user?
+                                <flux:heading size="lg">Restore User</flux:heading>
+                                <flux:text class="mt-2">Are you sure you want to restore this user?
                                     This action cannot be undone.
                                 </flux:text>
                             </div>
                             <div class="flex">
                                 <flux:spacer />
-                                <flux:button
-                                    type="submit"
-                                    variant="primary"
-                                    wire:click="restore({{ $user->id }})"
-                                >
+                                <flux:button type="submit" variant="primary"
+                                    wire:click="restore({{ $user->id }})">
                                     Restore
                                 </flux:button>
                             </div>
@@ -321,10 +247,7 @@ new class extends Component {
                     </flux:modal>
                 @empty
                     <flux:table.row>
-                        <flux:table.cell
-                            colspan="5"
-                            class="py-6 text-center text-gray-500"
-                        >
+                        <flux:table.cell colspan="5" class="py-6 text-center text-gray-500">
                             No users found.
                         </flux:table.cell>
                     </flux:table.row>

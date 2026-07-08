@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\Genre;
 use App\Models\Borrowing;
+use App\Models\Category;
+use App\Models\Genre;
 use App\Models\Review;
 use App\Models\User;
+use App\Models\Wishlist;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -80,5 +82,14 @@ class Book extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    /**
+     * Summary of wishlist
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Wishlist, Book>
+     */
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
     }
 }

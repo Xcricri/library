@@ -10,7 +10,7 @@ use Illuminate\Support\Carbon;
 
 class BorrowingController extends Controller
 {
-    public function returnBook(int $borrowingId)
+    public function returnBook($borrowingId)
     {
         $borrowing = Borrowing::findOrFail($borrowingId);
 
@@ -25,7 +25,7 @@ class BorrowingController extends Controller
         // Jika tanggal melewati masa tenggat
         if ($today->gt($dueDate)) {
             $status = 'overdue';
-            $daysLate = $today->diffInDays($dueDate, false); // Hitung selisih hari
+            $daysLate = $today->diffInDays($today); // Hitung selisih hari
             $fine = $daysLate * 5000;
         }
 
