@@ -4,8 +4,11 @@ use Livewire\Component;
 use Livewire\Attributes\Url;
 use Livewire\Attributes\Computed;
 use Livewire\WithPagination;
-use App\Models\User;
 use Illuminate\Support\Facades\Storage;
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
+
+use App\Models\User;
 
 new class extends Component {
     use WithPagination;
@@ -71,6 +74,11 @@ new class extends Component {
         session()->flash('message', 'User restored successfully.');
     }
 
+    public function export()
+    {
+        return Excel::download(new UsersExport(), 'users.xlsx');
+    }
+
     public function render()
     {
         return $this->view([
@@ -111,7 +119,10 @@ new class extends Component {
             </div>
         </div>
 
-        <div class="flex w-full justify-end md:w-auto">
+        <div class="flex w-full justify-end md:w-auto items-center gap-2">
+            <flux:button wire:click="export" variant="primary" size="sm">
+                Export Users
+            </flux:button>
             <flux:button href="{{ route('users.create') }}" wire:navigate variant="primary" size="sm"
                 class="w-full md:w-auto">
                 Add User

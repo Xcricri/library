@@ -63,10 +63,7 @@ new class extends Component {
 
                 <div class="flex items-center gap-5">
                     @if ($this->form->avatar)
-                        <flux:avatar
-                            src="{!! $this->form->avatar->temporaryUrl() !!}"
-                            size="md"
-                        />
+                        <flux:avatar src="{!! $this->form->avatar->temporaryUrl() !!}" size="md" />
                         <div wire:loading wire:target="form.avatar">
                             Uploading...
                         </div>
@@ -75,17 +72,13 @@ new class extends Component {
                     @endif
 
                     <div class="flex-1">
-                        <flux:input
-                            type="file"
-                            accept="image/*"
-                            wire:model="form.avatar"
-                        />
+                        <flux:input type="file" accept="image/*" wire:model="form.avatar" />
 
                         <flux:text size="sm" class="mt-2">
                             JPG, PNG or WEBP. Maximum 2MB.
                         </flux:text>
 
-                        @error ('form.avatar')
+                        @error('form.avatar')
                             <flux:text class="mt-1 text-red-500">
                                 {{ $message }}
                             </flux:text>
@@ -101,7 +94,7 @@ new class extends Component {
 
                     <flux:input wire:model="form.name" placeholder="John Doe" />
 
-                    @error ('form.name')
+                    @error('form.name')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>
@@ -111,13 +104,9 @@ new class extends Component {
                 <div class="space-y-2">
                     <flux:label>Email</flux:label>
 
-                    <flux:input
-                        type="email"
-                        wire:model="form.email"
-                        placeholder="john@example.com"
-                    />
+                    <flux:input type="email" wire:model="form.email" placeholder="john@example.com" />
 
-                    @error ('form.email')
+                    @error('form.email')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>
@@ -127,19 +116,14 @@ new class extends Component {
                 <div class="space-y-2">
                     <flux:label>Role</flux:label>
 
-                    <flux:select
-                        wire:model="form.role"
-                        placeholder="Select role..."
-                    >
+                    <flux:select wire:model="form.role" placeholder="Select role...">
                         <flux:select.option value="admin">
-                            admin</flux:select.option
-                        >
+                            admin</flux:select.option>
                         <flux:select.option value="user">
-                            user</flux:select.option
-                        >
+                            user</flux:select.option>
                     </flux:select>
 
-                    @error ('form.role')
+                    @error('form.role')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>
@@ -149,13 +133,9 @@ new class extends Component {
                 <div class="space-y-2">
                     <flux:label>Password</flux:label>
 
-                    <flux:input
-                        type="password"
-                        wire:model="form.password"
-                        placeholder="••••••••"
-                    />
+                    <flux:input type="password" wire:model="form.password" placeholder="••••••••" />
 
-                    @error ('form.password')
+                    @error('form.password')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>
@@ -163,18 +143,12 @@ new class extends Component {
                 </div>
 
                 <div class="space-y-2">
-                    <flux:label for="confirm_password"
-                        >Confirm Password</flux:label
-                    >
+                    <flux:label for="confirm_password">Confirm Password</flux:label>
 
-                    <flux:input
-                        type="password"
-                        id="confirm_password"
-                        wire:model="form.password_confirmation"
-                        placeholder="••••••••"
-                    />
+                    <flux:input type="password" id="confirm_password" wire:model="form.password_confirmation"
+                        placeholder="••••••••" />
 
-                    @error ('form.password_confirmation')
+                    @error('form.password_confirmation')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>
