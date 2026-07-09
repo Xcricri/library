@@ -3,13 +3,6 @@
 
 <head>
     @include ('partials.head')
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-
-    <script>
-        pdfjsLib.GlobalWorkerOptions.workerSrc =
-            "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-    </script>
 </head>
 
 <body class="min-h-screen bg-white dark:bg-zinc-800">
