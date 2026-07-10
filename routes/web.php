@@ -48,7 +48,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::prefix('user/books')->name('user.books.')->group(function () {
-        Route::get('/return/{id}', [BorrowingController::class, 'returnBook'])->name('return');
+        Route::post('/return/{id}', [BorrowingController::class, 'returnBook'])->name('return');
         Route::livewire('/index', 'pages::user-books.index')->name('index');
     });
 

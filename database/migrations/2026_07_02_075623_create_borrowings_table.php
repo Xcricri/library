@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('due_date');
             $table->date('returned_at')->nullable();
 
-            $table->enum('status', ['borrowed', 'returned', 'overdue'])
+            $table->enum('status', ['borrowed', 'returned'])
                 ->default('borrowed');
 
             $table->decimal('fine', 10, 2)->default(0.00);

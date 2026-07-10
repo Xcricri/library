@@ -15,7 +15,7 @@ new class extends Component {
     public $search = '';
 
     #[Url]
-    public $statusFiltered = 'borrowed';
+    public $statusFiltered = 'all';
 
     #[Url]
     public $date = '';
@@ -86,7 +86,6 @@ new class extends Component {
                     Borrowed</flux:select.option>
                 <flux:select.option value="returned">
                     Returned</flux:select.option>
-                <flux:select.option value="overdue">Overdue</flux:select.option>
             </flux:select>
 
             <div class="w-full sm:w-44">
@@ -132,8 +131,6 @@ new class extends Component {
                             <flux:badge color="green" size="sm">
                                 Book is borrowed
                             </flux:badge>
-                        @elseif ($borrowing->status === 'overdue')
-                            <flux:badge color="red" size="sm">Book is overdue</flux:badge>
                         @elseif ($borrowing->status === 'returned')
                             <flux:badge color="blue" size="sm">Book has been returned</flux:badge>
                         @endif

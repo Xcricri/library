@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Borrowing;
 use App\Models\Book;
+use App\Models\Borrowing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class BorrowingController extends Controller
 {
@@ -23,19 +24,20 @@ class BorrowingController extends Controller
         $status = 'returned';
 
         // Jika tanggal melewati masa tenggat
-        if ($today->gt($dueDate)) {
-            $status = 'overdue';
-            $daysLate = $today->diffInDays($today); // Hitung selisih hari
-            $fine = $daysLate * 5000;
-        }
+        $fine = $today->gt($dueDate)
+            ? $today->diffInDays($dueDate) * 5000
+            : 0;
 
-        $borrowing->update([
-            'returned_at' => now()->toDateString(),
-            'fine' => $fine,
-            'status' => $status
-        ]);
+        DB::transaction(function () use ($borrowing, $fine, $status, $book) {
+            $borrowing->update([
+                'returned_at' => now()->toDateString(),
+                'fine' => $fine,
+                'status' => $status
+            ]);
 
-        $book->increment('stock');
+            $book->increment('stock');
+        });
+
 
         return redirect()->back()->with('message', 'Book has been returned.');
     }

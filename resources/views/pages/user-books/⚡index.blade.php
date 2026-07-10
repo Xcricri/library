@@ -14,7 +14,7 @@ new class extends Component {
     public $search = '';
 
     #[Url]
-    public $statusFiltered = 'borrowed';
+    public $statusFiltered = 'all';
 
     public function updatingSearch()
     {
@@ -78,7 +78,6 @@ new class extends Component {
                     Borrowed</flux:select.option>
                 <flux:select.option value="returned">
                     Returned</flux:select.option>
-                <flux:select.option value="overdue">Overdue</flux:select.option>
             </flux:select>
         </div>
     </div>
@@ -117,13 +116,13 @@ new class extends Component {
                         </flux:table.cell>
                         <flux:table.cell class="py-0">
                             @if ($borrowing->status === 'borrowed')
-                                <flux:button variant="primary" color="red" class="pointer" size="sm"
-                                    href="{{ route('user.books.return', $borrowing->id) }} "
-                                    wire:click="returnBook({{ $borrowing->id }})">
-                                    Return Book
-                                </flux:button>
-                            @elseif ($borrowing->status === 'overdue')
-                                <flux:badge color="red" size="sm">Book is overdue</flux:badge>
+                                <form action="{{ route('user.books.return', $borrowing->id) }}" method="POST">
+                                    @csrf
+                                    <flux:button variant="primary" color="red" class="pointer" size="sm"
+                                        type="submit">
+                                        Return Book
+                                    </flux:button>
+                                </form>
                             @elseif ($borrowing->status === 'returned')
                                 <flux:badge color="blue" size="sm">Book has been returned</flux:badge>
                             @endif
