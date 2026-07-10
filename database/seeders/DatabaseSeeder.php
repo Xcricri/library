@@ -32,5 +32,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'user',
             'password' => Hash::make('password')
         ]);
+        $this->call(\Database\Seeders\Models\CategorySeeder::class);
+        $this->call(\Database\Seeders\Models\BookSeeder::class);
     }
 }
