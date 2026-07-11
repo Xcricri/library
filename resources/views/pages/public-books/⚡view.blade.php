@@ -50,7 +50,9 @@ new class extends Component {
 
             {{-- Bagian Kiri: Cover & Aksi --}}
             <div class="space-y-6 lg:col-span-1">
-                <div class="overflow-hidden rounded-xl shadow-lg transition-transform duration-300 hover:scale-[1.02]">
+                <div class="overflow-hidden rounded-xl shadow-lg ">
+
+                    <livewire:toggle.wishlist :book="$book" />
                     <img src="{{ Storage::url('covers/' . $book->cover) }}" alt="{{ $book->title }}"
                         class="aspect-2/3 w-full object-cover" />
                 </div>

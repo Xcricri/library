@@ -15,24 +15,10 @@ new class extends Component {
     public function openBorrowModal()
     {
         $this->showBorrowModal = true;
-
-        if (!auth()->check()) {
-            abort(403);
-        }
     }
 
     public function save()
     {
-        // Check auth
-        if (!auth()->check()) {
-            abort(403);
-        }
-
-        // Check role
-        if (auth()->user()->role !== 'user') {
-            abort(403);
-        }
-
         // Create borrowing record and decrement stock
         DB::transaction(function () use (&$message) {
             // Lock the book row for update
@@ -83,12 +69,7 @@ new class extends Component {
 ?>
 
 <div>
-    <flux:button
-        variant="primary"
-        icon="book-open"
-        class="w-full"
-        wire:click="openBorrowModal"
-    >
+    <flux:button variant="primary" icon="book-open" class="w-full" wire:click="openBorrowModal">
         Borrow Book
     </flux:button>
 
@@ -106,10 +87,7 @@ new class extends Component {
             </flux:select>
 
             <div class="flex justify-end gap-3">
-                <flux:button
-                    variant="ghost"
-                    wire:click="$set('showBorrowModal', false)"
-                >
+                <flux:button variant="ghost" wire:click="$set('showBorrowModal', false)">
                     Cancel
                 </flux:button>
                 <flux:button variant="primary" wire:click="save">

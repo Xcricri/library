@@ -15,7 +15,7 @@ new class extends Component {
     public $search = '';
 
     #[Url]
-    public $statusFiltered = 'all';
+    public $statusFiltered = 'borrowed';
 
     #[Url]
     public $date = '';

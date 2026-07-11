@@ -14,7 +14,7 @@ new class extends Component {
     public $search = '';
 
     #[Url]
-    public $statusFiltered = 'all';
+    public $statusFiltered = 'borrowed';
 
     public function updatingSearch()
     {
