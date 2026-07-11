@@ -6,6 +6,7 @@ namespace App\Models;
 use App\Models\Book;
 use App\Models\Borrowing;
 use App\Models\Review;
+use App\Models\Role;
 use App\Models\Wishlist;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -19,6 +20,7 @@ use Illuminate\Support\Str;
 use Laravel\Fortify\Contracts\PasskeyUser;
 use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  * @property int $id
@@ -40,6 +42,7 @@ class User extends Authenticatable implements PasskeyUser
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
     use SoftDeletes;
+    use HasRoles;
 
     /**
      * Get the attributes that should be cast.
@@ -79,7 +82,6 @@ class User extends Authenticatable implements PasskeyUser
             : $initials;
     }
 
-
     /**
      * Summary of borrowings
      * @return \Illuminate\Database\Eloquent\Relations\HasMany<Borrowing, User>
@@ -105,5 +107,14 @@ class User extends Authenticatable implements PasskeyUser
     public function wishlists()
     {
         return $this->hasMany(Wishlist::class);
+    }
+
+    /**
+     * Summary of roles
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Role, User, TPivotModel>
+     */
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
     }
 }

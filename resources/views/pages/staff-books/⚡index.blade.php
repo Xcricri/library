@@ -135,7 +135,7 @@ new class extends Component {
         </div>
 
         <div class="flex w-full justify-end md:w-auto">
-            <flux:button href="{{ route('admin.books.create') }}" wire:navigate variant="primary" size="sm"
+            <flux:button href="{{ route('staff.books.create') }}" wire:navigate variant="primary" size="sm"
                 class="w-full md:w-auto">
                 Add Book
             </flux:button>
@@ -212,7 +212,7 @@ new class extends Component {
                                 </flux:badge>
 
                                 <flux:badge color="yellow" size="sm"
-                                    href="{{ route('admin.books.update', $book->id) }}" wire:navigate
+                                    href="{{ route('staff.books.update', $book->id) }}" wire:navigate
                                     class="cursor-pointer">
                                     Edit
                                 </flux:badge>

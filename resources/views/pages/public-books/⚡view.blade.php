@@ -59,7 +59,7 @@ new class extends Component {
 
                 <div class="pt-2">
                     @auth
-                        @if (auth()->user()->role === 'user')
+                        @if (auth()->user()->hasRole('member'))
                             @if (auth()->user()->hasBorrowed($book))
                                 <div
                                     class="flex items-center justify-center gap-2 rounded-lg bg-red-50 p-3 text-sm font-medium text-red-600 dark:bg-red-950/30 dark:text-red-400">

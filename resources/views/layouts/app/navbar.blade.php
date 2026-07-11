@@ -13,14 +13,20 @@
         @if (Route::has('login'))
             <flux:navbar>
                 @auth
-                    @if (auth()->check() && auth()->user()->role === 'admin')
+                    @if (auth()->user()->hasRole('admin'))
                         <flux:navbar.item href="{{ route('admin.dashboard') }}"
                             class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
                             wire:navigate>
                             Dashboard
                         </flux:navbar.item>
-                    @elseif (auth()->check() && auth()->user()->role === 'user')
-                        <flux:navbar.item href="{{ route('user.dashboard') }}"
+                    @elseif (auth()->user()->hasRole('member'))
+                        <flux:navbar.item href="{{ route('member.dashboard') }}"
+                            class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+                            wire:navigate>
+                            Dashboard
+                        </flux:navbar.item>
+                    @elseif (auth()->user()->hasRole('staff'))
+                        <flux:navbar.item href="{{ route('staff.dashboard') }}"
                             class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
                             wire:navigate>
                             Dashboard

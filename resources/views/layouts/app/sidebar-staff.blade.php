@@ -9,35 +9,51 @@
     <flux:sidebar sticky collapsible="mobile"
         class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
         <flux:sidebar.header>
-            <x-app-logo :sidebar="true" href="{{ route('member.dashboard') }}" wire:navigate />
+            <x-app-logo :sidebar="true" href="{{ route('admin.dashboard') }}" wire:navigate />
             <flux:sidebar.collapse class="lg:hidden" />
         </flux:sidebar.header>
 
         <flux:sidebar.nav>
             <flux:sidebar.group :heading="__('Platform')" class="grid">
-                <flux:sidebar.item icon="home" :href="route('member.dashboard')"
-                    :current="request()->routeIs('member.dashboard')" wire:navigate>
+                {{-- Dashboard --}}
+                <flux:sidebar.item icon="home" :href="route('staff.dashboard')"
+                    :current="request()->routeIs('staff.dashboard')" wire:navigate>
                     {{ __('Dashboard') }}
                 </flux:sidebar.item>
 
-                <flux:sidebar.item icon="clock" :href="route('borrowings.index')"
-                    :current="request()->routeIs('borrowings.index')" wire:navigate>
-                    {{ __('Borrowings') }}
+                {{-- Category --}}
+                <flux:sidebar.item icon="funnel" :href="route('categories.index')"
+                    :current="request()->routeIs('categories.index')" wire:navigate>
+                    {{ __('Categories') }}
                 </flux:sidebar.item>
 
-                <flux:sidebar.item icon="book-open" :href="route('member.books.index')"
-                    :current="request()->routeIs('member.books.index')" wire:navigate>
+                {{-- Genre --}}
+                <flux:sidebar.item icon="tag" :href="route('genres.index')"
+                    :current="request()->routeIs('genres.index')" wire:navigate>
+                    {{ __('Genres') }}
+                </flux:sidebar.item>
+
+                {{-- Book --}}
+                <flux:sidebar.item icon="book-open" :href="route('staff.books.index')"
+                    :current="request()->routeIs('staff.books.index')" wire:navigate>
                     {{ __('Books') }}
-                </flux:sidebar.item>
-
-                <flux:sidebar.item icon="heart" :href="route('wishlists.index')"
-                    :current="request()->routeIs('wishlists.index')" wire:navigate>
-                    {{ __('Wishlist') }}
                 </flux:sidebar.item>
             </flux:sidebar.group>
         </flux:sidebar.nav>
 
         <flux:spacer />
+
+        <flux:sidebar.nav>
+            <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit"
+                target="_blank">
+                {{ __('Repository') }}
+            </flux:sidebar.item>
+
+            <flux:sidebar.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire"
+                target="_blank">
+                {{ __('Documentation') }}
+            </flux:sidebar.item>
+        </flux:sidebar.nav>
 
         <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
     </flux:sidebar>

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -17,21 +18,30 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
+        $this->call(\Database\Seeders\RoleSeeder::class);
 
-        User::factory()->create([
+        $admin = User::factory()->create([
             'name' => 'Test admin',
             'email' => 'test@example.com',
-            'role' => 'admin',
             'password' => Hash::make('password')
         ]);
 
+        $staf = User::factory()->create([
+            'name' => 'Test Staff',
+            'email' => 'teststaff@example.com',
+            'password' => Hash::make('password')
+        ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
+        $member = User::factory()->create([
+            'name' => 'Test Member',
             'email' => 'testuser@example.com',
-            'role' => 'user',
             'password' => Hash::make('password')
         ]);
+
+        $admin->roles()->sync([Role::where('name', 'admin')->first()->id]);
+        $staf->roles()->sync([Role::where('name', 'staff')->first()->id]);
+        $member->roles()->sync([Role::where('name', 'member')->first()->id]);
+
         $this->call(\Database\Seeders\Models\CategorySeeder::class);
         $this->call(\Database\Seeders\Models\BookSeeder::class);
     }

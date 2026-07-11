@@ -23,4 +23,7 @@ class UserForm extends Form
     public $password;
 
     public $password_confirmation = '';
+
+    #[Validate(['role_ids' => 'nullable|array', 'role_ids.*' => 'exists:roles,id'])]
+    public $role_ids = [];
 }

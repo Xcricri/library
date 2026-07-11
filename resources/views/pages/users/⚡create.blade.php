@@ -6,11 +6,19 @@ use Livewire\WithFileUploads;
 use App\Livewire\Forms\UserForm;
 
 use App\Models\User;
+use App\Models\Role;
 
 new class extends Component {
     use WithFileUploads;
 
     public UserForm $form;
+
+    public $roles;
+
+    public function mount()
+    {
+        $this->roles = Role::all();
+    }
 
     public function save()
     {
@@ -25,13 +33,14 @@ new class extends Component {
         }
 
         // Create user
-        User::create([
+        $user = User::create([
             'name' => $this->form->name,
             'email' => $this->form->email,
             'password' => Hash::make($this->form->password),
             'avatar' => $imageName,
-            'role' => $this->form->role,
         ]);
+
+        $user->roles()->sync($this->form->role_ids ?? []);
 
         session()->flash('message', 'User created successfully.');
 
@@ -40,7 +49,11 @@ new class extends Component {
 
     public function render()
     {
-        return $this->view()->layout('layouts::dashboard')->title('Create user');
+        return $this->view([
+            'roles' => $this->roles,
+        ])
+            ->layout('layouts::dashboard')
+            ->title('Create user');
     }
 };
 ?>
@@ -114,54 +127,66 @@ new class extends Component {
                 </div>
 
                 <div class="space-y-2">
-                    <flux:label>Role</flux:label>
+                    <flux:label>Roles</flux:label>
 
-                    <flux:select wire:model="form.role" placeholder="Select role...">
-                        <flux:select.option value="admin">
-                            admin</flux:select.option>
-                        <flux:select.option value="user">
-                            user</flux:select.option>
-                    </flux:select>
+                    <div class="grid grid-cols-2 gap-3">
+                        @foreach ($roles as $role)
+                            <label class="flex cursor-pointer items-center gap-2">
+                                <flux:checkbox wire:model="form.role_ids" value="{{ $role->id }}" />
 
-                    @error('form.role')
+                                <span class="text-sm">
+                                    {{ $role->name }}
+                                </span>
+                            </label>
+                        @endforeach
+                    </div>
+
+                    @error('form.role_ids')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>
                     @enderror
                 </div>
 
-                <div class="space-y-2">
-                    <flux:label>Password</flux:label>
-
-                    <flux:input type="password" wire:model="form.password" placeholder="••••••••" />
-
-                    @error('form.password')
-                        <flux:text class="text-red-500">
-                            {{ $message }}
-                        </flux:text>
-                    @enderror
-                </div>
-
-                <div class="space-y-2">
-                    <flux:label for="confirm_password">Confirm Password</flux:label>
-
-                    <flux:input type="password" id="confirm_password" wire:model="form.password_confirmation"
-                        placeholder="••••••••" />
-
-                    @error('form.password_confirmation')
-                        <flux:text class="text-red-500">
-                            {{ $message }}
-                        </flux:text>
-                    @enderror
-                </div>
+                @error('form.role_ids')
+                    <flux:text class="text-red-500">
+                        {{ $message }}
+                    </flux:text>
+                @enderror
             </div>
 
-            <!-- Footer -->
-            <div class="flex justify-end border-t pt-6">
-                <flux:button variant="primary" type="submit">
-                    Create User
-                </flux:button>
+            <div class="space-y-2">
+                <flux:label>Password</flux:label>
+
+                <flux:input type="password" wire:model="form.password" placeholder="••••••••" />
+
+                @error('form.password')
+                    <flux:text class="text-red-500">
+                        {{ $message }}
+                    </flux:text>
+                @enderror
             </div>
-        </form>
-    </flux:card>
+
+            <div class="space-y-2">
+                <flux:label for="confirm_password">Confirm Password</flux:label>
+
+                <flux:input type="password" id="confirm_password" wire:model="form.password_confirmation"
+                    placeholder="••••••••" />
+
+                @error('form.password_confirmation')
+                    <flux:text class="text-red-500">
+                        {{ $message }}
+                    </flux:text>
+                @enderror
+            </div>
+</div>
+
+<!-- Footer -->
+<div class="flex justify-end border-t pt-6">
+    <flux:button variant="primary" type="submit">
+        Create User
+    </flux:button>
+</div>
+</form>
+</flux:card>
 </div>

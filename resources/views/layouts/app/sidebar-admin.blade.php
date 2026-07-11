@@ -26,24 +26,6 @@
                     :current="request()->routeIs('users.index')" wire:navigate>
                     {{ __('Users') }}
                 </flux:sidebar.item>
-
-                {{-- Category --}}
-                <flux:sidebar.item icon="funnel" :href="route('categories.index')"
-                    :current="request()->routeIs('categories.index')" wire:navigate>
-                    {{ __('Categories') }}
-                </flux:sidebar.item>
-
-                {{-- Genre --}}
-                <flux:sidebar.item icon="tag" :href="route('genres.index')"
-                    :current="request()->routeIs('genres.index')" wire:navigate>
-                    {{ __('Genres') }}
-                </flux:sidebar.item>
-
-                {{-- Book --}}
-                <flux:sidebar.item icon="book-open" :href="route('admin.books.index')"
-                    :current="request()->routeIs('admin.books.index')" wire:navigate>
-                    {{ __('Books') }}
-                </flux:sidebar.item>
             </flux:sidebar.group>
         </flux:sidebar.nav>
 

@@ -2,24 +2,27 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Support\Facades\Auth;
-
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class RoleMiddleware
 {
     /**
      * Handle an incoming request.
      *
      * @param  Closure(Request): (Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        // Jika user bukan admin maka 403
-        if (!Auth::check() || Auth::user()->role !== 'admin') {
+        $user = $request->user();
+
+        if (!$user) {
             abort(403, 'Unauthorized');
+        }
+
+        if (!$user->hasAnyRole($roles)) {
+            abort(403, 'Anda tidak memiliki akses.');
         }
 
         return $next($request);

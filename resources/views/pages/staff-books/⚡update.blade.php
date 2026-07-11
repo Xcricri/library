@@ -79,7 +79,7 @@ new class extends Component {
 
         session()->flash('success', 'Book updated successfully.');
 
-        redirect()->route('admin.books.index');
+        redirect()->route('staff.books.index');
     }
 
     public function render()
@@ -111,33 +111,22 @@ new class extends Component {
                 <div class="flex-1">
                     @if ($this->form->cover)
                         <div class="aspect-2/3 w-48 overflow-hidden rounded-lg">
-                            <img
-                                src="{!! $this->form->cover->temporaryUrl() !!}"
-                                alt="Cover"
-                                class="h-full w-full object-cover"
-                            />
+                            <img src="{!! $this->form->cover->temporaryUrl() !!}" alt="Cover" class="h-full w-full object-cover" />
                         </div>
                     @elseif ($this->book->cover)
                         <div class="aspect-2/3 w-48 overflow-hidden rounded-lg">
-                            <img
-                                src="{{ Storage::url('covers/' . $this->book->cover) }}"
-                                alt="Cover"
-                                class="h-full w-full object-cover"
-                            />
+                            <img src="{{ Storage::url('covers/' . $this->book->cover) }}" alt="Cover"
+                                class="h-full w-full object-cover" />
                         </div>
                     @endif
 
-                    <flux:input
-                        type="file"
-                        accept="image/*"
-                        wire:model="form.cover"
-                    />
+                    <flux:input type="file" accept="image/*" wire:model="form.cover" />
 
                     <flux:text size="sm" class="mt-2">
                         JPG, PNG or WEBP. Maximum 2MB.
                     </flux:text>
 
-                    @error ('form.cover')
+                    @error('form.cover')
                         <flux:text class="mt-1 text-red-500">
                             {{ $message }}
                         </flux:text>
@@ -152,16 +141,10 @@ new class extends Component {
                     <div class="space-y-2 md:col-span-2">
                         <flux:label>Book Title</flux:label>
 
-                        <flux:input
-                            wire:model="form.title"
-                            placeholder="Enter book title"
-                        />
+                        <flux:input wire:model="form.title" placeholder="Enter book title" />
 
-                        @error ('form.title')
-                            <flux:text
-                                class="text-red-500"
-                                >{{ $message }}</flux:text
-                            >
+                        @error('form.title')
+                            <flux:text class="text-red-500">{{ $message }}</flux:text>
                         @enderror
                     </div>
 
@@ -169,16 +152,10 @@ new class extends Component {
                     <div class="space-y-2">
                         <flux:label>Author</flux:label>
 
-                        <flux:input
-                            wire:model="form.author"
-                            placeholder="Enter author name"
-                        />
+                        <flux:input wire:model="form.author" placeholder="Enter author name" />
 
-                        @error ('form.author')
-                            <flux:text
-                                class="text-red-500"
-                                >{{ $message }}</flux:text
-                            >
+                        @error('form.author')
+                            <flux:text class="text-red-500">{{ $message }}</flux:text>
                         @enderror
                     </div>
 
@@ -186,16 +163,10 @@ new class extends Component {
                     <div class="space-y-2">
                         <flux:label>Publisher</flux:label>
 
-                        <flux:input
-                            wire:model="form.publisher_name"
-                            placeholder="Enter publisher name"
-                        />
+                        <flux:input wire:model="form.publisher_name" placeholder="Enter publisher name" />
 
-                        @error ('form.publisher_name')
-                            <flux:text
-                                class="text-red-500"
-                                >{{ $message }}</flux:text
-                            >
+                        @error('form.publisher_name')
+                            <flux:text class="text-red-500">{{ $message }}</flux:text>
                         @enderror
                     </div>
 
@@ -203,16 +174,10 @@ new class extends Component {
                     <div class="space-y-2">
                         <flux:label>Publication Date</flux:label>
 
-                        <flux:input
-                            type="date"
-                            wire:model="form.published_at"
-                        />
+                        <flux:input type="date" wire:model="form.published_at" />
 
-                        @error ('form.published_at')
-                            <flux:text
-                                class="text-red-500"
-                                >{{ $message }}</flux:text
-                            >
+                        @error('form.published_at')
+                            <flux:text class="text-red-500">{{ $message }}</flux:text>
                         @enderror
                     </div>
 
@@ -220,17 +185,10 @@ new class extends Component {
                     <div class="space-y-2">
                         <flux:label>Isbn</flux:label>
 
-                        <flux:input
-                            type="text"
-                            wire:model="form.isbn"
-                            placeholder="Enter ISBN"
-                        />
+                        <flux:input type="text" wire:model="form.isbn" placeholder="Enter ISBN" />
 
-                        @error ('form.isbn')
-                            <flux:text
-                                class="text-red-500"
-                                >{{ $message }}</flux:text
-                            >
+                        @error('form.isbn')
+                            <flux:text class="text-red-500">{{ $message }}</flux:text>
                         @enderror
                     </div>
 
@@ -238,17 +196,10 @@ new class extends Component {
                     <div class="space-y-2">
                         <flux:label>Book Stock</flux:label>
 
-                        <flux:input
-                            type="number"
-                            wire:model="form.stock"
-                            placeholder="Enter book stock"
-                        />
+                        <flux:input type="number" wire:model="form.stock" placeholder="Enter book stock" />
 
-                        @error ('form.stock')
-                            <flux:text
-                                class="text-red-500"
-                                >{{ $message }}</flux:text
-                            >
+                        @error('form.stock')
+                            <flux:text class="text-red-500">{{ $message }}</flux:text>
                         @enderror
                     </div>
 
@@ -256,17 +207,11 @@ new class extends Component {
                     <div class="space-y-2 md:col-span-2">
                         <flux:label>Book Description</flux:label>
 
-                        <flux:textarea
-                            rows="5"
-                            wire:model="form.description"
-                            placeholder="Enter book description..."
-                        />
+                        <flux:textarea rows="5" wire:model="form.description"
+                            placeholder="Enter book description..." />
 
-                        @error ('form.description')
-                            <flux:text
-                                class="text-red-500"
-                                >{{ $message }}</flux:text
-                            >
+                        @error('form.description')
+                            <flux:text class="text-red-500">{{ $message }}</flux:text>
                         @enderror
                     </div>
                 </div>
@@ -281,13 +226,8 @@ new class extends Component {
 
                         <div class="grid grid-cols-2 gap-3">
                             @foreach ($genres as $genre)
-                                <label
-                                    class="flex cursor-pointer items-center gap-2"
-                                >
-                                    <flux:checkbox
-                                        wire:model="form.genre_ids"
-                                        value="{{ $genre->id }}"
-                                    />
+                                <label class="flex cursor-pointer items-center gap-2">
+                                    <flux:checkbox wire:model="form.genre_ids" value="{{ $genre->id }}" />
 
                                     <span class="text-sm">
                                         {{ $genre->name }}
@@ -296,11 +236,8 @@ new class extends Component {
                             @endforeach
                         </div>
 
-                        @error ('form.genre_ids')
-                            <flux:text
-                                class="text-red-500"
-                                >{{ $message }}</flux:text
-                            >
+                        @error('form.genre_ids')
+                            <flux:text class="text-red-500">{{ $message }}</flux:text>
                         @enderror
                     </div>
 
@@ -312,13 +249,8 @@ new class extends Component {
 
                         <div class="grid grid-cols-2 gap-3">
                             @foreach ($categories as $category)
-                                <label
-                                    class="flex cursor-pointer items-center gap-2"
-                                >
-                                    <flux:checkbox
-                                        wire:model="form.category_ids"
-                                        value="{{ $category->id }}"
-                                    />
+                                <label class="flex cursor-pointer items-center gap-2">
+                                    <flux:checkbox wire:model="form.category_ids" value="{{ $category->id }}" />
 
                                     <span class="text-sm">
                                         {{ $category->name }}
@@ -327,11 +259,8 @@ new class extends Component {
                             @endforeach
                         </div>
 
-                        @error ('form.category_ids')
-                            <flux:text
-                                class="text-red-500"
-                                >{{ $message }}</flux:text
-                            >
+                        @error('form.category_ids')
+                            <flux:text class="text-red-500">{{ $message }}</flux:text>
                         @enderror
                     </div>
                 </div>

@@ -116,7 +116,7 @@ new class extends Component {
                         </flux:table.cell>
                         <flux:table.cell class="py-0">
                             @if ($borrowing->status === 'borrowed')
-                                <form action="{{ route('user.books.return', $borrowing->id) }}" method="POST">
+                                <form action="{{ route('member.books.return', $borrowing->id) }}" method="POST">
                                     @csrf
                                     <flux:button variant="primary" color="red" class="pointer" size="sm"
                                         type="submit">

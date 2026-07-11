@@ -5,5 +5,4 @@ return [
     App\Providers\FortifyServiceProvider::class,
     App\Providers\TelescopeServiceProvider::class,
     Maatwebsite\Excel\ExcelServiceProvider::class,
-    ConsoleTVs\Charts\ChartsServiceProvider::class,
 ];
