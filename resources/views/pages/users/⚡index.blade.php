@@ -186,7 +186,7 @@ new class extends Component {
                                     </flux:badge>
                                 </flux:modal.trigger>
                             @else
-                                <flux:badge color="yellow" size="sm" href="{{ route('users.edit', $user->id) }}"
+                                <flux:badge color="yellow" size="sm" href="{{ route('users.update', $user->id) }}"
                                     wire:navigate class="cursor-pointer">
                                     Edit
                                 </flux:badge>

@@ -36,6 +36,6 @@ class BookForm extends Form
     #[Validate(['genre_ids' => 'nullable|array', 'genre_ids.*' => 'exists:genres,id'])]
     public $genre_ids = [];
 
-    #[Validate(['category_ids' => 'nullable|array', 'category_ids.*' => 'exists:categories,id'])]
-    public $category_ids = [];
+    #[Validate('required|exists:categories,id')]
+    public $category_id;
 }

@@ -5,7 +5,7 @@ namespace Database\Seeders\Models;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class CategorySeeder extends Seeder
+class GenreSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,18 +16,17 @@ class CategorySeeder extends Seeder
     {
         /**
          * Command :
-         * artisan seed:generate --model-mode --models=Category
+         * artisan seed:generate --model-mode --models=Genre
          *
          */
 
-
-        $newData0 = \App\Models\Category::create([
+        $newData0 = \App\Models\Genre::create([
             'id' => 1,
-            'name' => 'Category 1',
+            'name' => 'Genre 1',
         ]);
-        $newData1 = \App\Models\Category::create([
+        $newData1 = \App\Models\Genre::create([
             'id' => 2,
-            'name' => 'Category 2',
+            'name' => 'Genre 2',
         ]);
     }
 }

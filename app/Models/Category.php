@@ -14,10 +14,10 @@ class Category extends Model
 
     /**
      * Summary of books
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Book, Category, TPivotModel>
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Book, Category, >
      */
     public function books()
     {
-        return $this->belongsToMany(Book::class);
+        return $this->hasMany(Book::class);
     }
 }

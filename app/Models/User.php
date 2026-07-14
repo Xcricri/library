@@ -4,7 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Book;
-use App\Models\Borrowing;
+use App\Models\BookBorrowing;
 use App\Models\Review;
 use App\Models\Role;
 use App\Models\Wishlist;
@@ -84,11 +84,11 @@ class User extends Authenticatable implements PasskeyUser
 
     /**
      * Summary of borrowings
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Borrowing, User>
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<BookBorrowing, User>
      */
     public function borrowings()
     {
-        return $this->hasMany(Borrowing::class);
+        return $this->hasMany(BookBorrowing::class);
     }
 
     /**

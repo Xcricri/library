@@ -5,7 +5,7 @@ use Livewire\WithPagination;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Url;
 
-use App\Models\Borrowing;
+use App\Models\BookBorrowing;
 
 new class extends Component {
     use WithPagination;
@@ -30,7 +30,7 @@ new class extends Component {
     #[Computed]
     public function borrowings()
     {
-        $query = Borrowing::with(['book.genres'])->where('user_id', auth()->id());
+        $query = BookBorrowing::with(['book.genres'])->where('user_id', auth()->id());
 
         $query->when($this->search, function ($q) {
             $q->whereHas('book', fn($q) => $q->where('title', 'like', '%' . $this->search . '%'));
@@ -58,7 +58,7 @@ new class extends Component {
     {{-- Header --}}
     <div>
         <flux:heading size="lg">
-            Table borrowed
+            Table Books
 
             <flux:text> List of Borrowed Books </flux:text>
         </flux:heading>
@@ -67,12 +67,12 @@ new class extends Component {
     {{-- Toolbar --}}
     <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div class="w-full md:max-w-sm">
-            <flux:input wire:model.live.debounce.300ms="search" icon="magnifying-glass" placeholder="Cari buku..."
+            <flux:input wire:model.live.debounce.300ms="search" icon="magnifying-glass" placeholder="Search book..."
                 size="sm" />
         </div>
 
         <div class="w-full sm:w-48">
-            <flux:select wire:model.live="statusFiltered" placeholder="Pilih Status" size="sm">
+            <flux:select wire:model.live="statusFiltered" placeholder="Choose status" size="sm">
                 <flux:select.option value="all">All</flux:select.option>
                 <flux:select.option value="borrowed">
                     Borrowed</flux:select.option>

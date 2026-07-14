@@ -22,7 +22,7 @@ new class extends Component {
         $this->user = User::findOrFail($id);
         $this->form->name = $this->user->name;
         $this->form->email = $this->user->email;
-        $this->form->role_ids = $this->user->roles()->pluck('roles.id')->unique()->toArray();
+        $this->form->role_id = $this->user->roles()->first()?->id;
         $this->form->password = '';
         $this->roles = Role::all();
     }
@@ -56,6 +56,8 @@ new class extends Component {
             'avatar' => $imageName,
             'password' => $password,
         ]);
+
+        $this->user->roles()->sync($this->form->role_id);
 
         session()->flash('message', 'User updated successfully.');
 
@@ -168,19 +170,15 @@ new class extends Component {
                 <div class="space-y-2">
                     <flux:label>Role</flux:label>
 
-                    <div class="grid grid-cols-2 gap-3">
+                    <flux:select wire:model="form.role_id">
                         @foreach ($roles as $role)
-                            <label class="flex cursor-pointer items-center gap-2">
-                                <flux:checkbox wire:model="form.role_ids" value="{{ $role->id }}" />
-
-                                <span class="text-sm">
-                                    {{ $role->name }}
-                                </span>
-                            </label>
+                            <option value="{{ $role->id }}">
+                                {{ $role->name }}
+                            </option>
                         @endforeach
-                    </div>
+                    </flux:select>
 
-                    @error('form.role_ids')
+                    @error('form.role_id')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>

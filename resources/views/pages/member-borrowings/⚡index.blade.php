@@ -6,7 +6,7 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\Url;
 use Illuminate\Support\Carbon;
 
-use App\Models\Borrowing;
+use App\Models\BookBorrowing;
 
 new class extends Component {
     use WithPagination;
@@ -34,7 +34,7 @@ new class extends Component {
     #[Computed]
     public function borrowings()
     {
-        return Borrowing::query()
+        return BookBorrowing::query()
             ->with('book')
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
@@ -75,7 +75,7 @@ new class extends Component {
     {{-- Toolbar --}}
     <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div class="w-full md:max-w-sm">
-            <flux:input wire:model.live.debounce.300ms="search" icon="magnifying-glass" placeholder="Cari buku..."
+            <flux:input wire:model.live.debounce.300ms="search" icon="magnifying-glass" placeholder="Search book..."
                 size="sm" />
         </div>
 

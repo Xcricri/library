@@ -23,7 +23,7 @@ new class extends Component {
     // Mount data
     public function mount($id)
     {
-        $this->book = Book::with(['genres', 'categories'])->findOrFail($id);
+        $this->book = Book::with(['genres'])->findOrFail($id);
         $this->form->title = $this->book->title;
         $this->form->author = $this->book->author;
         $this->form->publisher_name = $this->book->publisher_name;
@@ -32,8 +32,7 @@ new class extends Component {
         $this->form->description = $this->book->description;
         $this->form->published_at = $this->book->published_at;
         $this->form->genre_ids = $this->book->genres()->pluck('genres.id')->unique()->toArray();
-        $this->form->category_ids = $this->book->categories()->pluck('categories.id')->unique()->toArray();
-
+        $this->form->category_id = $this->book->category_id;
         $this->genres = Genre::all();
         $this->categories = Category::all();
     }
@@ -71,10 +70,10 @@ new class extends Component {
             'description' => $this->form->description,
             'published_at' => $this->form->published_at,
             'stock' => $this->form->stock,
+            'category_id' => $this->form->category_id,
         ]);
 
         // Relations
-        $this->book->categories()->sync($this->form->category_ids ?? []);
         $this->book->genres()->sync($this->form->genre_ids ?? []);
 
         session()->flash('success', 'Book updated successfully.');
@@ -159,6 +158,26 @@ new class extends Component {
                         @enderror
                     </div>
 
+                    {{-- Category --}}
+                    <div class="space-y-2">
+                        <flux:label class="font-semibold">
+                            Book Category
+                        </flux:label>
+
+                        <div>
+                            <flux:select wire:model="form.category_id" placeholder="Choose category...">
+                                @foreach ($categories as $category)
+                                    <flux:select.option value="{{ $category->id }}">{{ $category->name }}
+                                    </flux:select.option>
+                                @endforeach
+                            </flux:select>
+                        </div>
+
+                        @error('form.category_id')
+                            <flux:text class="text-red-500">{{ $message }}</flux:text>
+                        @enderror
+                    </div>
+
                     {{-- Publisher --}}
                     <div class="space-y-2">
                         <flux:label>Publisher</flux:label>
@@ -216,55 +235,30 @@ new class extends Component {
                     </div>
                 </div>
 
-                {{-- Genre & Category --}}
-                <div class="grid gap-6 lg:grid-cols-2">
-                    {{-- Genre --}}
-                    <div class="space-y-4 rounded-lg p-5">
-                        <flux:label class="font-semibold">
-                            Book Genre
-                        </flux:label>
+                {{-- Genre --}}
+                <div class="space-y-4 rounded-lg p-5">
+                    <flux:label class="font-semibold">
+                        Book Genres
+                    </flux:label>
 
-                        <div class="grid grid-cols-2 gap-3">
-                            @foreach ($genres as $genre)
-                                <label class="flex cursor-pointer items-center gap-2">
-                                    <flux:checkbox wire:model="form.genre_ids" value="{{ $genre->id }}" />
+                    <div class="grid grid-cols-6 gap-3">
+                        @foreach ($genres as $genre)
+                            <label class="flex cursor-pointer items-center gap-2">
+                                <flux:checkbox wire:model="form.genre_ids" value="{{ $genre->id }}" />
 
-                                    <span class="text-sm">
-                                        {{ $genre->name }}
-                                    </span>
-                                </label>
-                            @endforeach
-                        </div>
-
-                        @error('form.genre_ids')
-                            <flux:text class="text-red-500">{{ $message }}</flux:text>
-                        @enderror
+                                <span class="text-sm">
+                                    {{ $genre->name }}
+                                </span>
+                            </label>
+                        @endforeach
                     </div>
 
-                    {{-- Category --}}
-                    <div class="space-y-4 rounded-lg p-5">
-                        <flux:label class="font-semibold">
-                            Book Category
-                        </flux:label>
-
-                        <div class="grid grid-cols-2 gap-3">
-                            @foreach ($categories as $category)
-                                <label class="flex cursor-pointer items-center gap-2">
-                                    <flux:checkbox wire:model="form.category_ids" value="{{ $category->id }}" />
-
-                                    <span class="text-sm">
-                                        {{ $category->name }}
-                                    </span>
-                                </label>
-                            @endforeach
-                        </div>
-
-                        @error('form.category_ids')
-                            <flux:text class="text-red-500">{{ $message }}</flux:text>
-                        @enderror
-                    </div>
+                    @error('form.genre_ids')
+                        <flux:text class="text-red-500">{{ $message }}</flux:text>
+                    @enderror
                 </div>
             </div>
+
             <!-- Footer -->
             <div class="flex justify-end border-t pt-6">
                 <flux:button variant="primary" type="submit">

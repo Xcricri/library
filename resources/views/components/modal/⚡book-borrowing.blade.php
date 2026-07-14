@@ -4,12 +4,12 @@ use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Book;
-use App\Models\Borrowing;
+use App\Models\BookBorrowing;
 
 new class extends Component {
     public Book $book;
     public bool $showBorrowModal = false;
-    public int $duration = 14;
+    public int $duration = 1;
 
     // Open Modal
     public function openBorrowModal()
@@ -17,15 +17,18 @@ new class extends Component {
         $this->showBorrowModal = true;
     }
 
+    // Save borrowing
     public function save()
     {
+        $message = '';
+
         // Create borrowing record and decrement stock
         DB::transaction(function () use (&$message) {
             // Lock the book row for update
             $book = Book::lockForUpdate()->findOrFail($this->book->id);
 
             // If book already borrowed
-            $alreadyBorrowed = Borrowing::where('user_id', auth()->id())
+            $alreadyBorrowed = BookBorrowing::where('user_id', auth()->id())
                 ->where('book_id', $this->book->id)
                 ->where('status', 'borrowed')
                 ->exists();
@@ -35,12 +38,14 @@ new class extends Component {
                 return;
             }
 
+            // If Book is not available
             if ($book->stock <= 0) {
                 $message = 'Book is not available.';
                 return;
             }
 
-            Borrowing::create([
+            // Create Borrowing
+            BookBorrowing::create([
                 'user_id' => auth()->id(),
                 'book_id' => $this->book->id,
                 'borrowed_at' => now(),
@@ -49,6 +54,7 @@ new class extends Component {
                 'status' => 'borrowed',
             ]);
 
+            // Decrement stock
             $book->decrement('stock');
 
             $message = 'Book borrowed successfully.';
@@ -58,6 +64,7 @@ new class extends Component {
 
         session()->flash('message', $message);
 
+        // Event
         $this->dispatch('borrowed', $message);
     }
 
@@ -69,10 +76,13 @@ new class extends Component {
 ?>
 
 <div>
+
+    {{-- Button --}}
     <flux:button variant="primary" icon="book-open" class="w-full" wire:click="openBorrowModal">
         Borrow Book
     </flux:button>
 
+    {{-- Modal --}}
     <flux:modal wire:model="showBorrowModal" class="max-w-md">
         <div class="space-y-6">
             <flux:heading size="lg"> Borrow Book </flux:heading>
@@ -81,9 +91,8 @@ new class extends Component {
 
             <flux:select label="Borrow Duration" wire:model="duration">
                 <option value="1">1 Days</option>
+                <option value="3">3 Days</option>
                 <option value="7">7 Days</option>
-                <option value="14">14 Days</option>
-                <option value="30">30 Days</option>
             </flux:select>
 
             <div class="flex justify-end gap-3">

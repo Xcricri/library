@@ -43,6 +43,7 @@ class DatabaseSeeder extends Seeder
         $member->roles()->sync([Role::where('name', 'member')->first()->id]);
 
         $this->call(\Database\Seeders\Models\CategorySeeder::class);
+        $this->call(\Database\Seeders\Models\GenreSeeder::class);
         $this->call(\Database\Seeders\Models\BookSeeder::class);
     }
 }

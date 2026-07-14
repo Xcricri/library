@@ -6,7 +6,7 @@ use App\Models\Book;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
-class Borrowing extends Model
+class BookBorrowing extends Model
 {
     protected $fillable = [
         'user_id',
@@ -28,7 +28,7 @@ class Borrowing extends Model
 
     /**
      * Summary of book
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Book, Borrowing>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Book, BookBorrowing>
      */
     public function book()
     {
@@ -37,7 +37,7 @@ class Borrowing extends Model
 
     /**
      * Summary of user
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, Borrowing>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, BookBorrowing>
      */
     public function user()
     {

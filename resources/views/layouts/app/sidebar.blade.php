@@ -20,11 +20,6 @@
                     {{ __('Dashboard') }}
                 </flux:sidebar.item>
 
-                <flux:sidebar.item icon="clock" :href="route('borrowings.index')"
-                    :current="request()->routeIs('borrowings.index')" wire:navigate>
-                    {{ __('Borrowings') }}
-                </flux:sidebar.item>
-
                 <flux:sidebar.item icon="book-open" :href="route('member.books.index')"
                     :current="request()->routeIs('member.books.index')" wire:navigate>
                     {{ __('Books') }}
@@ -34,6 +29,13 @@
                     :current="request()->routeIs('wishlists.index')" wire:navigate>
                     {{ __('Wishlist') }}
                 </flux:sidebar.item>
+
+                <flux:sidebar.group expandable heading="History" class="grid">
+                    <flux:sidebar.item icon="clock" :href="route('borrowings.index')"
+                        :current="request()->routeIs('borrowings.index')" wire:navigate>
+                        {{ __('Borrowings') }}
+                    </flux:sidebar.item>
+                </flux:sidebar.group>
             </flux:sidebar.group>
         </flux:sidebar.nav>
 

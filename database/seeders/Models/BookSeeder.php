@@ -2,6 +2,8 @@
 
 namespace Database\Seeders\Models;
 
+use App\Models\Book;
+use App\Models\Genre;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -21,10 +23,9 @@ class BookSeeder extends Seeder
          */
 
 
-        $newData0 = \App\Models\Book::create([
+        $newData0 = Book::create([
             'author' => 'Penulis 1',
             'cover' => '',
-            'created_at' => now(),
             'deleted_at' => NULL,
             'description' => 'Hello world!',
             'id' => 1,
@@ -34,12 +35,11 @@ class BookSeeder extends Seeder
             'slug' => 'testing-book-1',
             'stock' => 10,
             'title' => 'Testing Book 1',
-            'updated_at' => now(),
+            'category_id' => 1,
         ]);
-        $newData1 = \App\Models\Book::create([
+        $newData1 = Book::create([
             'author' => 'Penulis 2',
             'cover' => '',
-            'created_at' => now(),
             'deleted_at' => NULL,
             'description' => 'Hello world',
             'id' => 2,
@@ -49,7 +49,10 @@ class BookSeeder extends Seeder
             'slug' => 'testing-book-2',
             'stock' => 10,
             'title' => 'Testing Book 2',
-            'updated_at' => now(),
+            'category_id' => 2,
         ]);
+
+        $newData0->genres()->sync([Genre::where('name', 'Genre 1')->first()->id]);
+        $newData1->genres()->sync([Genre::where('name', 'Genre 2')->first()->id]);
     }
 }

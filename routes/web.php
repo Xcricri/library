@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\BorrowingController;
+use App\Http\Controllers\BookBorrowingController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('home');
@@ -17,7 +17,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::prefix('admin/users')->name('users.')->group(function () {
         Route::livewire('/index', 'pages::users.index')->name('index');
         Route::livewire('/create', 'pages::users.create')->name('create');
-        Route::livewire('/edit/{id}', 'pages::users.edit')->name('edit');
+        Route::livewire('/update/{id}', 'pages::users.update')->name('update');
     });
 });
 
@@ -26,11 +26,11 @@ Route::middleware(['auth', 'role:member'])->group(function () {
     Route::view('/dashboard', 'dashboard')->name('member.dashboard');
 
     Route::prefix('member/borrowings')->name('borrowings.')->group(function () {
-        Route::livewire('/index', 'pages::borrowings.index')->name('index');
+        Route::livewire('/index', 'pages::member-borrowings.index')->name('index');
     });
 
     Route::prefix('member/books')->name('member.books.')->group(function () {
-        Route::post('/return/{id}', [BorrowingController::class, 'returnBook'])->name('return');
+        Route::post('/return/{id}', [BookBorrowingController::class, 'returnBook'])->name('return');
         Route::livewire('/index', 'pages::member-books.index')->name('index');
     });
 

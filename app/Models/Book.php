@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Borrowing;
+use App\Models\BorrowingBook;
 use App\Models\Category;
 use App\Models\Genre;
 use App\Models\Review;
@@ -29,6 +29,7 @@ class Book extends Model
         'stock',
         'description',
         'published_at',
+        'category_id'
     ];
 
     /**
@@ -59,11 +60,11 @@ class Book extends Model
 
     /**
      * Summary of borrowings
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Borrowing, Book, TPivotModel>
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<BorrowingBook, Book, TPivotModel>
      */
     public function borrowings()
     {
-        return $this->hasMany(Borrowing::class);
+        return $this->hasMany(BorrowingBook::class);
     }
 
     /**
@@ -77,11 +78,11 @@ class Book extends Model
 
     /**
      * Summary of categories
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Category, Book,TPivotModel>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Category, Book>
      */
-    public function categories()
+    public function category()
     {
-        return $this->belongsToMany(Category::class);
+        return $this->belongsTo(Category::class);
     }
 
     /**
