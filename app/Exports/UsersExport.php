@@ -3,13 +3,14 @@
 namespace App\Exports;
 
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class UsersExport implements FromCollection, WithHeadings
 {
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function collection()
     {
@@ -18,6 +19,7 @@ class UsersExport implements FromCollection, WithHeadings
 
     /**
      * Summary of headings
+     *
      * @return string[]
      */
     public function headings(): array
@@ -33,8 +35,8 @@ class UsersExport implements FromCollection, WithHeadings
 
     /**
      * Summary of map
-     * @param mixed $user
-     * @return array
+     *
+     * @param  mixed  $user
      */
     public function map($user): array
     {

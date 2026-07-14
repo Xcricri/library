@@ -5,7 +5,6 @@ namespace Database\Seeders\Models;
 use App\Models\Book;
 use App\Models\Genre;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class BookSeeder extends Seeder
 {
@@ -19,14 +18,11 @@ class BookSeeder extends Seeder
         /**
          * Command :
          * artisan seed:generate --model-mode --models=Book
-         *
          */
-
-
         $newData0 = Book::create([
             'author' => 'Penulis 1',
             'cover' => '',
-            'deleted_at' => NULL,
+            'deleted_at' => null,
             'description' => 'Hello world!',
             'id' => 1,
             'isbn' => 'ISBN123456789',
@@ -40,7 +36,7 @@ class BookSeeder extends Seeder
         $newData1 = Book::create([
             'author' => 'Penulis 2',
             'cover' => '',
-            'deleted_at' => NULL,
+            'deleted_at' => null,
             'description' => 'Hello world',
             'id' => 2,
             'isbn' => 'ISBN123456788',

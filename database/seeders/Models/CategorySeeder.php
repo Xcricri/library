@@ -2,8 +2,8 @@
 
 namespace Database\Seeders\Models;
 
+use App\Models\Category;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class CategorySeeder extends Seeder
 {
@@ -17,15 +17,12 @@ class CategorySeeder extends Seeder
         /**
          * Command :
          * artisan seed:generate --model-mode --models=Category
-         *
          */
-
-
-        $newData0 = \App\Models\Category::create([
+        $newData0 = Category::create([
             'id' => 1,
             'name' => 'Category 1',
         ]);
-        $newData1 = \App\Models\Category::create([
+        $newData1 = Category::create([
             'id' => 2,
             'name' => 'Category 2',
         ]);

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Role extends Model
 {
@@ -11,7 +11,8 @@ class Role extends Model
 
     /**
      * Summary of users
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<User, Role, TPivotModel>
+     *
+     * @return BelongsToMany<User, Role, TPivotModel>
      */
     public function users()
     {

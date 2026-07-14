@@ -62,4 +62,4 @@ Route::middleware(['auth', 'role:staff'])->group(function () {
     });
 });
 
-require __DIR__ . '/settings.php';
+require __DIR__.'/settings.php';

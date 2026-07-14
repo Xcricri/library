@@ -16,5 +16,5 @@ it('renders the public storage path for user avatars on the index page', functio
     $response = $this->get(route('users.index'));
 
     $response->assertOk();
-    $response->assertSee('/storage/avatars/' . $user->avatar, false);
+    $response->assertSee('/storage/avatars/'.$user->avatar, false);
 });

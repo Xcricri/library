@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\BookBorrowing;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -37,7 +35,7 @@ class BookBorrowingController extends Controller
             $borrowing->update([
                 'returned_at' => now()->toDateString(),
                 'fine' => $fine,
-                'status' => $status
+                'status' => $status,
             ]);
 
             $book->increment('stock');

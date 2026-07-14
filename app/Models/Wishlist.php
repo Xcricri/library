@@ -3,19 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Wishlist extends Model
 {
-
     /**
      * Summary of fillable
+     *
      * @var array
      */
     protected $fillable = ['user_id', 'book_id'];
 
     /**
      * Summary of user
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, Wishlist>
+     *
+     * @return BelongsTo<User, Wishlist>
      */
     public function user()
     {
@@ -24,7 +26,8 @@ class Wishlist extends Model
 
     /**
      * Summary of book
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Book, Wishlist>
+     *
+     * @return BelongsTo<Book, Wishlist>
      */
     public function book()
     {

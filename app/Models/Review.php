@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Book;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Review extends Model
 {
@@ -12,12 +11,13 @@ class Review extends Model
         'user_id',
         'book_id',
         'rating',
-        'comment'
+        'comment',
     ];
 
     /**
      * Summary of user
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, Review>
+     *
+     * @return BelongsTo<User, Review>
      */
     public function user()
     {
@@ -26,7 +26,8 @@ class Review extends Model
 
     /**
      * Summary of book
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Book, Review>
+     *
+     * @return BelongsTo<Book, Review>
      */
     public function book()
     {

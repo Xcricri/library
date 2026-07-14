@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Genre extends Model
 {
     /**
      * Summary of fillable
+     *
      * @var array
      */
     protected $fillable = [
@@ -16,7 +18,8 @@ class Genre extends Model
 
     /**
      * Summary of books
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Book, Genre>
+     *
+     * @return BelongsToMany<Book, Genre>
      */
     public function books()
     {

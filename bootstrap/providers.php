@@ -1,8 +1,13 @@
 <?php
 
+use App\Providers\AppServiceProvider;
+use App\Providers\FortifyServiceProvider;
+use App\Providers\TelescopeServiceProvider;
+use Maatwebsite\Excel\ExcelServiceProvider;
+
 return [
-    App\Providers\AppServiceProvider::class,
-    App\Providers\FortifyServiceProvider::class,
-    App\Providers\TelescopeServiceProvider::class,
-    Maatwebsite\Excel\ExcelServiceProvider::class,
+    AppServiceProvider::class,
+    FortifyServiceProvider::class,
+    TelescopeServiceProvider::class,
+    ExcelServiceProvider::class,
 ];

@@ -3,15 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\Book;
-use App\Models\BookBorrowing;
-use App\Models\Review;
-use App\Models\Role;
-use App\Models\Wishlist;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -41,8 +38,9 @@ class User extends Authenticatable implements PasskeyUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
-    use SoftDeletes;
+
     use HasRoles;
+    use SoftDeletes;
 
     /**
      * Get the attributes that should be cast.
@@ -59,10 +57,11 @@ class User extends Authenticatable implements PasskeyUser
 
     /**
      * Summary of dates
+     *
      * @var array
      */
     protected $dates = [
-        'deleted_at'
+        'deleted_at',
     ];
 
     public function hasBorrowed(Book $book)
@@ -78,13 +77,14 @@ class User extends Authenticatable implements PasskeyUser
         $initials = Str::initials($this->name, true);
 
         return Str::length($initials) > 1
-            ? Str::substr($initials, 0, 1) . Str::substr($initials, -1)
+            ? Str::substr($initials, 0, 1).Str::substr($initials, -1)
             : $initials;
     }
 
     /**
      * Summary of borrowings
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<BookBorrowing, User>
+     *
+     * @return HasMany<BookBorrowing, User>
      */
     public function borrowings()
     {
@@ -93,7 +93,8 @@ class User extends Authenticatable implements PasskeyUser
 
     /**
      * Summary of reviews
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Review, User>
+     *
+     * @return HasMany<Review, User>
      */
     public function reviews()
     {
@@ -102,7 +103,8 @@ class User extends Authenticatable implements PasskeyUser
 
     /**
      * Summary of wishlist
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Wishlist, User>
+     *
+     * @return HasMany<Wishlist, User>
      */
     public function wishlists()
     {
@@ -111,7 +113,8 @@ class User extends Authenticatable implements PasskeyUser
 
     /**
      * Summary of roles
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Role, User, TPivotModel>
+     *
+     * @return BelongsToMany<Role, User, TPivotModel>
      */
     public function roles()
     {

@@ -2,13 +2,10 @@
 
 namespace App\Models;
 
-use App\Models\BorrowingBook;
-use App\Models\Category;
-use App\Models\Genre;
-use App\Models\Review;
-use App\Models\User;
-use App\Models\Wishlist;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Book extends Model
@@ -17,6 +14,7 @@ class Book extends Model
 
     /**
      * Summary of fillable
+     *
      * @var array
      */
     protected $fillable = [
@@ -29,20 +27,22 @@ class Book extends Model
         'stock',
         'description',
         'published_at',
-        'category_id'
+        'category_id',
     ];
 
     /**
      * Summary of dates
+     *
      * @var array
      */
     protected $dates = [
-        'deleted_at'
+        'deleted_at',
     ];
 
     /**
      * Summary of users
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, Book>
+     *
+     * @return BelongsTo<User, Book>
      */
     public function user()
     {
@@ -51,7 +51,8 @@ class Book extends Model
 
     /**
      * Summary of genres
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Genre, Book>
+     *
+     * @return BelongsToMany<Genre, Book>
      */
     public function genres()
     {
@@ -60,7 +61,8 @@ class Book extends Model
 
     /**
      * Summary of borrowings
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<BorrowingBook, Book, TPivotModel>
+     *
+     * @return HasMany<BorrowingBook, Book, TPivotModel>
      */
     public function borrowings()
     {
@@ -69,7 +71,8 @@ class Book extends Model
 
     /**
      * Summary of reviews
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Review, Book>
+     *
+     * @return HasMany<Review, Book>
      */
     public function reviews()
     {
@@ -78,7 +81,8 @@ class Book extends Model
 
     /**
      * Summary of categories
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Category, Book>
+     *
+     * @return BelongsTo<Category, Book>
      */
     public function category()
     {
@@ -87,7 +91,8 @@ class Book extends Model
 
     /**
      * Summary of wishlist
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Wishlist, Book>
+     *
+     * @return HasMany<Wishlist, Book>
      */
     public function wishlists()
     {

@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Book;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BookBorrowing extends Model
 {
@@ -21,14 +20,15 @@ class BookBorrowing extends Model
     {
         return [
             'borrowed_at' => 'datetime',
-            'due_date'    => 'datetime',
+            'due_date' => 'datetime',
             'returned_at' => 'datetime',
         ];
     }
 
     /**
      * Summary of book
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Book, BookBorrowing>
+     *
+     * @return BelongsTo<Book, BookBorrowing>
      */
     public function book()
     {
@@ -37,7 +37,8 @@ class BookBorrowing extends Model
 
     /**
      * Summary of user
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, BookBorrowing>
+     *
+     * @return BelongsTo<User, BookBorrowing>
      */
     public function user()
     {

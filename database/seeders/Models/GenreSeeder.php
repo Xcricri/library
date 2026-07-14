@@ -2,8 +2,8 @@
 
 namespace Database\Seeders\Models;
 
+use App\Models\Genre;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class GenreSeeder extends Seeder
 {
@@ -17,14 +17,12 @@ class GenreSeeder extends Seeder
         /**
          * Command :
          * artisan seed:generate --model-mode --models=Genre
-         *
          */
-
-        $newData0 = \App\Models\Genre::create([
+        $newData0 = Genre::create([
             'id' => 1,
             'name' => 'Genre 1',
         ]);
-        $newData1 = \App\Models\Genre::create([
+        $newData1 = Genre::create([
             'id' => 2,
             'name' => 'Genre 2',
         ]);
