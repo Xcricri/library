@@ -62,11 +62,11 @@ class Book extends Model
     /**
      * Summary of borrowings
      *
-     * @return HasMany<BorrowingBook, Book, TPivotModel>
+     * @return HasMany<BookBorrowing, Book, TPivotModel>
      */
     public function borrowings()
     {
-        return $this->hasMany(BorrowingBook::class);
+        return $this->hasMany(BookBorrowing::class);
     }
 
     /**
