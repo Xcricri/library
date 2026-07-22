@@ -68,24 +68,36 @@ new class extends Component {
                 @forelse ($wishlists as $wishlist)
                     <flux:table.row>
                         <flux:table.cell>
-                            {{ $loop->iteration }}</flux:table.cell>
+                            {{ $loop->iteration }}</flux:table.cell
+                        >
                         <flux:table.cell>
-                            <img src="{{ Storage::url('covers/' . $wishlist->book->cover) }}"
-                                alt="{{ $wishlist->book->title }}" class="aspect-2/3 w-9 rounded" />
+                            <img
+                                src="{{ Storage::url('covers/' . $wishlist->book->cover) }}"
+                                alt="{{ $wishlist->book->title }}"
+                                class="aspect-2/3 w-9 rounded"
+                            />
                         </flux:table.cell>
                         <flux:table.cell>
-                            {{ $wishlist->book->title }}</flux:table.cell>
+                            {{ $wishlist->book->title }}</flux:table.cell
+                        >
                         <flux:table.cell>
                             {{ $wishlist->book->genres->pluck('name')->join(', ') }}
                         </flux:table.cell>
                         <flux:table.cell class="py-0">
-
-                            <flux:badge color="green" size="sm"
-                                href="{{ route('public.books.view', $wishlist->book->slug) }}" wire:navigate>
+                            <flux:badge
+                                color="green"
+                                size="sm"
+                                href="{{ route('public.books.view', $wishlist->book->slug) }}"
+                                wire:navigate
+                            >
                                 View
                             </flux:badge>
 
-                            <flux:badge color="red" size="sm" wire:click="remove({{ $wishlist->id }})">
+                            <flux:badge
+                                color="red"
+                                size="sm"
+                                wire:click="remove({{ $wishlist->id }})"
+                            >
                                 Remove
                             </flux:badge>
                         </flux:table.cell>

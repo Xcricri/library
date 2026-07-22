@@ -76,7 +76,10 @@ new class extends Component {
 
                 <div class="flex items-center gap-5">
                     @if ($this->form->avatar)
-                        <flux:avatar src="{!! $this->form->avatar->temporaryUrl() !!}" size="md" />
+                        <flux:avatar
+                            src="{!! $this->form->avatar->temporaryUrl() !!}"
+                            size="md"
+                        />
                         <div wire:loading wire:target="form.avatar">
                             Uploading...
                         </div>
@@ -85,13 +88,17 @@ new class extends Component {
                     @endif
 
                     <div class="flex-1">
-                        <flux:input type="file" accept="image/*" wire:model="form.avatar" />
+                        <flux:input
+                            type="file"
+                            accept="image/*"
+                            wire:model="form.avatar"
+                        />
 
                         <flux:text size="sm" class="mt-2">
                             JPG, PNG or WEBP. Maximum 2MB.
                         </flux:text>
 
-                        @error('form.avatar')
+                        @error ('form.avatar')
                             <flux:text class="mt-1 text-red-500">
                                 {{ $message }}
                             </flux:text>
@@ -107,7 +114,7 @@ new class extends Component {
 
                     <flux:input wire:model="form.name" placeholder="John Doe" />
 
-                    @error('form.name')
+                    @error ('form.name')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>
@@ -117,9 +124,13 @@ new class extends Component {
                 <div class="space-y-2">
                     <flux:label>Email</flux:label>
 
-                    <flux:input type="email" wire:model="form.email" placeholder="john@example.com" />
+                    <flux:input
+                        type="email"
+                        wire:model="form.email"
+                        placeholder="john@example.com"
+                    />
 
-                    @error('form.email')
+                    @error ('form.email')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>
@@ -131,61 +142,64 @@ new class extends Component {
 
                     <div class="grid grid-cols-2 gap-3">
                         @foreach ($roles as $role)
-                            <label class="flex cursor-pointer items-center gap-2">
-                                <flux:checkbox wire:model="form.role_ids" value="{{ $role->id }}" />
+                            <label
+                                class="flex cursor-pointer items-center gap-2"
+                            >
+                                <flux:checkbox
+                                    wire:model="form.role_ids"
+                                    value="{{ $role->id }}"
+                                />
 
-                                <span class="text-sm">
-                                    {{ $role->name }}
-                                </span>
+                                <span class="text-sm"> {{ $role->name }} </span>
                             </label>
                         @endforeach
                     </div>
 
-                    @error('form.role_ids')
+                    @error ('form.role_ids')
                         <flux:text class="text-red-500">
                             {{ $message }}
                         </flux:text>
                     @enderror
                 </div>
 
-                @error('form.role_ids')
-                    <flux:text class="text-red-500">
-                        {{ $message }}
-                    </flux:text>
+                @error ('form.role_ids')
+                    <flux:text class="text-red-500"> {{ $message }} </flux:text>
                 @enderror
             </div>
 
             <div class="space-y-2">
                 <flux:label>Password</flux:label>
 
-                <flux:input type="password" wire:model="form.password" placeholder="••••••••" />
+                <flux:input
+                    type="password"
+                    wire:model="form.password"
+                    placeholder="••••••••"
+                />
 
-                @error('form.password')
-                    <flux:text class="text-red-500">
-                        {{ $message }}
-                    </flux:text>
+                @error ('form.password')
+                    <flux:text class="text-red-500"> {{ $message }} </flux:text>
                 @enderror
             </div>
 
             <div class="space-y-2">
                 <flux:label for="confirm_password">Confirm Password</flux:label>
 
-                <flux:input type="password" id="confirm_password" wire:model="form.password_confirmation"
-                    placeholder="••••••••" />
+                <flux:input
+                    type="password"
+                    id="confirm_password"
+                    wire:model="form.password_confirmation"
+                    placeholder="••••••••"
+                />
 
-                @error('form.password_confirmation')
-                    <flux:text class="text-red-500">
-                        {{ $message }}
-                    </flux:text>
+                @error ('form.password_confirmation')
+                    <flux:text class="text-red-500"> {{ $message }} </flux:text>
                 @enderror
             </div>
 </div>
 
 <!-- Footer -->
 <div class="flex justify-end border-t pt-6">
-    <flux:button variant="primary" type="submit">
-        Create User
-    </flux:button>
+    <flux:button variant="primary" type="submit"> Create User </flux:button>
 </div>
 </form>
 </flux:card>

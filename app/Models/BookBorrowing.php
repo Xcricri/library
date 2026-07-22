@@ -14,6 +14,7 @@ class BookBorrowing extends Model
         'returned_at',
         'borrowed_at',
         'due_date',
+        'fine'
     ];
 
     protected function casts(): array

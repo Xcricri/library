@@ -65,19 +65,31 @@ new class extends Component {
     </div>
 
     {{-- Toolbar --}}
-    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <div
+        class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
+    >
         <div class="w-full md:max-w-sm">
-            <flux:input wire:model.live.debounce.300ms="search" icon="magnifying-glass" placeholder="Search book..."
-                size="sm" />
+            <flux:input
+                wire:model.live.debounce.300ms="search"
+                icon="magnifying-glass"
+                placeholder="Search book..."
+                size="sm"
+            />
         </div>
 
         <div class="w-full sm:w-48">
-            <flux:select wire:model.live="statusFiltered" placeholder="Choose status" size="sm">
+            <flux:select
+                wire:model.live="statusFiltered"
+                placeholder="Choose status"
+                size="sm"
+            >
                 <flux:select.option value="all">All</flux:select.option>
                 <flux:select.option value="borrowed">
-                    Borrowed</flux:select.option>
+                    Borrowed</flux:select.option
+                >
                 <flux:select.option value="returned">
-                    Returned</flux:select.option>
+                    Returned</flux:select.option
+                >
             </flux:select>
         </div>
     </div>
@@ -104,27 +116,42 @@ new class extends Component {
                 @forelse ($borrowings as $borrowing)
                     <flux:table.row>
                         <flux:table.cell>
-                            {{ $loop->iteration }}</flux:table.cell>
+                            {{ $loop->iteration }}</flux:table.cell
+                        >
                         <flux:table.cell>
-                            <img src="{{ Storage::url('covers/' . $borrowing->book->cover) }}"
-                                alt="{{ $borrowing->book->title }}" class="aspect-2/3 w-9 rounded" />
+                            <img
+                                src="{{ Storage::url('covers/' . $borrowing->book->cover) }}"
+                                alt="{{ $borrowing->book->title }}"
+                                class="aspect-2/3 w-9 rounded"
+                            />
                         </flux:table.cell>
                         <flux:table.cell>
-                            {{ $borrowing->book->title }}</flux:table.cell>
+                            {{ $borrowing->book->title }}</flux:table.cell
+                        >
                         <flux:table.cell>
                             {{ $borrowing->book->genres->pluck('name')->join(', ') }}
                         </flux:table.cell>
                         <flux:table.cell class="py-0">
                             @if ($borrowing->status === 'borrowed')
-                                <form action="{{ route('member.books.return', $borrowing->id) }}" method="POST">
+                                <form
+                                    action="{{ route('member.books.return', $borrowing->id) }}"
+                                    method="POST"
+                                >
                                     @csrf
-                                    <flux:button variant="primary" color="red" class="pointer" size="sm"
-                                        type="submit">
+                                    <flux:button
+                                        variant="primary"
+                                        color="red"
+                                        class="pointer"
+                                        size="sm"
+                                        type="submit"
+                                    >
                                         Return Book
                                     </flux:button>
                                 </form>
                             @elseif ($borrowing->status === 'returned')
-                                <flux:badge color="blue" size="sm">Book has been returned</flux:badge>
+                                <flux:badge color="blue" size="sm"
+                                    >Book has been returned</flux:badge
+                                >
                             @endif
                         </flux:table.cell>
                     </flux:table.row>

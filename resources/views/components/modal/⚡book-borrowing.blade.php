@@ -76,9 +76,13 @@ new class extends Component {
 ?>
 
 <div>
-
     {{-- Button --}}
-    <flux:button variant="primary" icon="book-open" class="w-full" wire:click="openBorrowModal">
+    <flux:button
+        variant="primary"
+        icon="book-open"
+        class="w-full"
+        wire:click="openBorrowModal"
+    >
         Borrow Book
     </flux:button>
 
@@ -96,7 +100,10 @@ new class extends Component {
             </flux:select>
 
             <div class="flex justify-end gap-3">
-                <flux:button variant="ghost" wire:click="$set('showBorrowModal', false)">
+                <flux:button
+                    variant="ghost"
+                    wire:click="$set('showBorrowModal', false)"
+                >
                     Cancel
                 </flux:button>
                 <flux:button variant="primary" wire:click="save">

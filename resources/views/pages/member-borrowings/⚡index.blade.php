@@ -73,23 +73,39 @@ new class extends Component {
     </div>
 
     {{-- Toolbar --}}
-    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <div
+        class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
+    >
         <div class="w-full md:max-w-sm">
-            <flux:input wire:model.live.debounce.300ms="search" icon="magnifying-glass" placeholder="Search book..."
-                size="sm" />
+            <flux:input
+                wire:model.live.debounce.300ms="search"
+                icon="magnifying-glass"
+                placeholder="Search book..."
+                size="sm"
+            />
         </div>
 
         <div class="flex w-full items-center gap-4 md:max-w-sm">
-            <flux:select wire:model.live="statusFiltered" placeholder="Choose status..." size="sm">
+            <flux:select
+                wire:model.live="statusFiltered"
+                placeholder="Choose status..."
+                size="sm"
+            >
                 <flux:select.option value="all">All</flux:select.option>
                 <flux:select.option value="borrowed">
-                    Borrowed</flux:select.option>
+                    Borrowed</flux:select.option
+                >
                 <flux:select.option value="returned">
-                    Returned</flux:select.option>
+                    Returned</flux:select.option
+                >
             </flux:select>
 
             <div class="w-full sm:w-44">
-                <flux:input type="date" wire:model.live.debounce.300ms="date" size="sm" />
+                <flux:input
+                    type="date"
+                    wire:model.live.debounce.300ms="date"
+                    size="sm"
+                />
             </div>
         </div>
     </div>
@@ -118,11 +134,14 @@ new class extends Component {
                 <flux:table.rows>
                     <flux:table.cell>{{ $loop->iteration }}</flux:table.cell>
                     <flux:table.cell>
-                        {{ $borrowing->book->title }}</flux:table.cell>
+                        {{ $borrowing->book->title }}</flux:table.cell
+                    >
                     <flux:table.cell>
-                        {{ Carbon::parse($borrowing->borrowed_at)->format('d-Y-M') }}</flux:table.cell>
+                        {{ Carbon::parse($borrowing->borrowed_at)->format('d-Y-M') }}</flux:table.cell
+                    >
                     <flux:table.cell>
-                        {{ Carbon::parse($borrowing->due_date)->format('d-Y-M') }}</flux:table.cell>
+                        {{ Carbon::parse($borrowing->due_date)->format('d-Y-M') }}</flux:table.cell
+                    >
                     <flux:table.cell>
                         {{ $borrowing->returned_at ? Carbon::parse($borrowing->returned_at)->format('d-Y-M') : '-' }}
                     </flux:table.cell>
@@ -132,11 +151,14 @@ new class extends Component {
                                 Book is borrowed
                             </flux:badge>
                         @elseif ($borrowing->status === 'returned')
-                            <flux:badge color="blue" size="sm">Book has been returned</flux:badge>
+                            <flux:badge color="blue" size="sm"
+                                >Book has been returned</flux:badge
+                            >
                         @endif
                     </flux:table.cell>
                     <flux:table.cell>
-                        Rp {{ number_format($borrowing->fine, 0, ',', '.') }}</flux:table.cell>
+                        Rp {{ number_format($borrowing->fine, 0, ',', '.') }}</flux:table.cell
+                    >
                 </flux:table.rows>
             @empty
                 <flux:table.rows>
